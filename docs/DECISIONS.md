@@ -21,3 +21,10 @@
 - Fuzzy matching only produces suggestions and never auto-resolves entities.
 - Unresolved aliases do not create new entities automatically.
 - Ambiguous identity cases are intentionally deferred to future human review workflows.
+- Staging is mandatory before any future database promotion.
+- JSONL is the primary normalized format inside staging.
+- Valid and rejected records are stored separately during validation.
+- `validation_report.json` is the machine-readable validation artifact.
+- `review_report.md` is the human-readable review artifact.
+- Validation is flexible but controlled; problematic rows are reported, not silently dropped.
+- No data promotion to PostgreSQL happens in this phase.

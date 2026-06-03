@@ -58,3 +58,13 @@ bash scripts/check.sh
 - Approved aliases can resolve automatically to internal IDs.
 - Unresolved entities should go to manual review before entering stable flows.
 - Fuzzy matching only generates suggestions and never creates or approves entities.
+
+## Safe staging smoke test
+
+```bash
+bash scripts/smoke_staging.sh
+```
+
+This creates a fake import run under `data/staging/imports/`, writes normalized and validated JSONL outputs, and generates validation reports.
+
+The smoke test does not touch PostgreSQL.

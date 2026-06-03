@@ -19,6 +19,7 @@ This phase includes:
 - Repository structure and project configuration
 - Dockerized database services
 - Identity resolution foundation for aliases and fuzzy suggestions
+- Safe staging and validation foundation for future data ingestion
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -71,6 +72,12 @@ python -m src.db.drop_db --yes-i-know
 ```bash
 bash scripts/check.sh
 ```
+
+## Safe staging
+
+External data does not enter PostgreSQL yet. Imports must first go through staging, where the project writes normalized JSONL files plus machine-readable and human-readable validation reports.
+
+Promotion into durable project datasets will be added in a future phase. This phase only prepares `normalized.jsonl`, `valid.jsonl`, `rejected.jsonl`, `validation_report.json`, `review_report.md`, and `metadata.json`.
 
 ## Notes
 
