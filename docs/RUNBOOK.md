@@ -80,3 +80,15 @@ Example:
 ```bash
 python -m src.ingestion.importers.historical_results_importer --input data/raw/sample/historical_results_sample.csv
 ```
+
+## Source audit sample
+
+```bash
+bash scripts/audit_sample_source.sh
+```
+
+This audits the local historical-results sample and produces:
+
+- `source_audit_report.json`
+- `source_audit_report.md`
+- `data/staging/source_registry.json`

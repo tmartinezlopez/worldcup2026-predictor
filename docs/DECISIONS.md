@@ -32,3 +32,7 @@
 - Importers create staging artifacts only and do not promote to the database in this phase.
 - Small sample files are allowed under `data/raw/sample` for repeatable local smoke tests.
 - Any future real external source must pass a source audit before ingestion is enabled.
+- Every real source must pass an explicit audit before it can be enabled.
+- Rejected sources stay registered locally so the team does not repeat the same evaluation blindly.
+- License, coverage, quality, and operational risks must be documented during source audit.
+- No large real dataset is downloaded automatically in this phase.

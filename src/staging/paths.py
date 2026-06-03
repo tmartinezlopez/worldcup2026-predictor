@@ -33,6 +33,12 @@ def make_import_run_dir(source_name: str, timestamp: datetime | None = None) -> 
     source_dir = ensure_staging_dirs() / _slugify_source_name(source_name)
     source_dir.mkdir(parents=True, exist_ok=True)
 
-    run_dir = source_dir / run_timestamp.strftime("%Y%m%dT%H%M%SZ")
-    run_dir.mkdir(parents=True, exist_ok=False)
-    return run_dir
+    base_name = run_timestamp.strftime("%Y%m%dT%H%M%SZ")
+    for attempt in range(1000):
+        suffix = f"_{attempt:03d}" if attempt else ""
+        run_dir = source_dir / f"{base_name}{suffix}"
+        if not run_dir.exists():
+            run_dir.mkdir(parents=True, exist_ok=False)
+            return run_dir
+
+    raise RuntimeError(f"Could not allocate unique run directory for {source_name}")

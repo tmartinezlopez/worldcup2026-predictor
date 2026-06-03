@@ -21,6 +21,7 @@ This phase includes:
 - Identity resolution foundation for aliases and fuzzy suggestions
 - Safe staging and validation foundation for future data ingestion
 - Base importers for local controlled files
+- Source audit framework for controlled evaluation of future real data sources
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -80,6 +81,12 @@ bash scripts/check.sh
 External data does not enter PostgreSQL yet. Imports must first go through staging, where the project writes normalized JSONL files plus machine-readable and human-readable validation reports.
 
 Promotion into durable project datasets will be added in a future phase. This phase only prepares `normalized.jsonl`, `valid.jsonl`, `rejected.jsonl`, `validation_report.json`, `review_report.md`, and `metadata.json`.
+
+## Source auditing
+
+Real candidate sources are still not promoted into PostgreSQL. They are audited first using controlled local samples, and each audit produces explicit JSON and Markdown reports.
+
+A local registry keeps the latest audit decision for each candidate source so we can document acceptance, warnings, or rejection before any real ingestion is enabled.
 
 ## Notes
 

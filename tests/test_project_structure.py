@@ -57,6 +57,7 @@ def test_required_files_exist():
         "scripts/db_healthcheck.sh",
         "scripts/smoke_staging.sh",
         "scripts/smoke_importers.sh",
+        "scripts/audit_sample_source.sh",
         "src/db/base.py",
         "src/db/connection.py",
         "src/db/models.py",
@@ -83,6 +84,8 @@ def test_required_files_exist():
         "src/ingestion/importers/elo_importer.py",
         "src/ingestion/importers/fifa_ranking_importer.py",
         "src/ingestion/importers/players_importer.py",
+        "src/ingestion/source_audit.py",
+        "src/ingestion/source_registry.py",
         "tests/test_identity_normalizers.py",
         "tests/test_identity_matching.py",
         "tests/test_team_identity.py",
@@ -99,6 +102,8 @@ def test_required_files_exist():
         "tests/test_elo_importer.py",
         "tests/test_fifa_ranking_importer.py",
         "tests/test_players_importer.py",
+        "tests/test_source_audit.py",
+        "tests/test_source_registry.py",
     ]
 
     for relative_path in expected_files:

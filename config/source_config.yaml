@@ -1,3 +1,13 @@
 sources:
   ingestion_mode: "not_implemented"
   source_registry: []
+  historical_results:
+    candidate_sources:
+      - name: martj42_international_results
+        type: historical_results
+        url: https://github.com/martj42/international_results
+        expected_format: csv
+        license: unknown_to_verify
+        importer: historical_results_importer
+        priority: high
+        notes: Candidate for historical international match results.
