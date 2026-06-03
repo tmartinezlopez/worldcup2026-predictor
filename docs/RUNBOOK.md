@@ -106,3 +106,19 @@ python -m src.ingestion.source_audits.historical_results_audit --local-file data
 ```
 
 The audit downloads the raw CSV in a controlled temporary file when internet is available, writes all outputs under `data/staging/imports/...`, and does not touch PostgreSQL.
+
+## Historical results promotion
+
+```bash
+bash scripts/promote_historical_results.sh <run_dir>
+```
+
+```bash
+bash scripts/promote_historical_results.sh <run_dir> --promote
+```
+
+```bash
+bash scripts/promote_historical_results.sh <run_dir> --promote --allow-create-teams
+```
+
+Promotion runs in dry-run mode by default. `--promote` is required before any database write happens, and a `promotion_report` is written into the same `run_dir`.

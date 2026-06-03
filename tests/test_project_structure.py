@@ -13,6 +13,7 @@ def test_main_directories_exist():
         "logs",
         "src/db",
         "src/ingestion",
+        "src/ingestion/promotion",
         "src/identity",
         "src/staging",
         "src/validation",
@@ -59,6 +60,8 @@ def test_required_files_exist():
         "scripts/smoke_importers.sh",
         "scripts/audit_sample_source.sh",
         "scripts/audit_historical_results_source.sh",
+        "scripts/promote_historical_results.sh",
+        "scripts/smoke_promote_historical_results.sh",
         "src/db/base.py",
         "src/db/connection.py",
         "src/db/models.py",
@@ -88,6 +91,8 @@ def test_required_files_exist():
         "src/ingestion/source_audit.py",
         "src/ingestion/source_registry.py",
         "src/ingestion/source_audits/historical_results_audit.py",
+        "src/ingestion/promotion/reports.py",
+        "src/ingestion/promotion/historical_results_promoter.py",
         "tests/test_identity_normalizers.py",
         "tests/test_identity_matching.py",
         "tests/test_team_identity.py",
@@ -107,6 +112,8 @@ def test_required_files_exist():
         "tests/test_source_audit.py",
         "tests/test_source_registry.py",
         "tests/test_historical_results_audit.py",
+        "tests/test_promotion_reports.py",
+        "tests/test_historical_results_promoter.py",
     ]
 
     for relative_path in expected_files:

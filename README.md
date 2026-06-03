@@ -23,6 +23,7 @@ This phase includes:
 - Base importers for local controlled files
 - Source audit framework for controlled evaluation of future real data sources
 - Historical results source audit support
+- Controlled staging-to-database promotion for historical results
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -90,6 +91,8 @@ Real candidate sources are still not promoted into PostgreSQL. They are audited 
 A local registry keeps the latest audit decision for each candidate source so we can document acceptance, warnings, or rejection before any real ingestion is enabled.
 
 The audit layer still does not promote anything to the database.
+
+Historical-results promotion now exists as a controlled step, but it still requires an explicit flag before any database write happens.
 
 ## Notes
 

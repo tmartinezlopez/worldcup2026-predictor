@@ -40,3 +40,7 @@
 - Real datasets are audited in a controlled run before any acceptance decision.
 - Real downloaded datasets are not versioned in the repository.
 - License verification remains mandatory before definitive use.
+- Promotion from staging to the database requires explicit dry-run or `--promote`.
+- Unresolved teams block or skip rows unless a controlled seed/dev mode is explicitly enabled.
+- `--allow-create-teams` is development-only and must not be treated as normal production behavior.
+- Promotion reports are mandatory for every promotion run.
