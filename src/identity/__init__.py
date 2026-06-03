@@ -1,1 +1,1 @@
-"""Identity package."""
+"""Identity resolution package."""

@@ -52,3 +52,9 @@ python -m src.db.drop_db --yes-i-know
 ```bash
 bash scripts/check.sh
 ```
+
+## Identity resolution
+
+- Approved aliases can resolve automatically to internal IDs.
+- Unresolved entities should go to manual review before entering stable flows.
+- Fuzzy matching only generates suggestions and never creates or approves entities.

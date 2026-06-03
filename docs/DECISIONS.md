@@ -16,3 +16,8 @@
 - JSONB is reserved for variable payloads and flexible configuration blocks.
 - External and internal team ratings are stored separately.
 - Constraints and supporting indexes are defined from the start.
+- `src/identity` is a transversal module shared by ingestion, validation, and prediction workflows.
+- Teams and players have the highest-priority identity handling.
+- Fuzzy matching only produces suggestions and never auto-resolves entities.
+- Unresolved aliases do not create new entities automatically.
+- Ambiguous identity cases are intentionally deferred to future human review workflows.

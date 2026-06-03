@@ -18,6 +18,7 @@ This phase includes:
 
 - Repository structure and project configuration
 - Dockerized database services
+- Identity resolution foundation for aliases and fuzzy suggestions
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests

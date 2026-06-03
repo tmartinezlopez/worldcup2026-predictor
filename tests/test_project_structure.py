@@ -59,6 +59,15 @@ def test_required_files_exist():
         "src/db/init_db.py",
         "src/db/drop_db.py",
         "src/db/healthcheck.py",
+        "src/identity/normalizers.py",
+        "src/identity/matching.py",
+        "src/identity/team_identity.py",
+        "src/identity/player_identity.py",
+        "src/identity/generic_identity.py",
+        "tests/test_identity_normalizers.py",
+        "tests/test_identity_matching.py",
+        "tests/test_team_identity.py",
+        "tests/test_player_identity.py",
     ]
 
     for relative_path in expected_files:
