@@ -1,0 +1,7 @@
+project:
+  name: worldcup2026-predictor
+  phase: foundation
+
+logging:
+  level: INFO
+  file: logs/pipeline.log

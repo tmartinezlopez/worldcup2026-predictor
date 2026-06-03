@@ -1,0 +1,3 @@
+batches:
+  cutoff_policy: "10_minutes_before_first_match"
+  schedule_source: "pending_definition"

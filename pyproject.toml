@@ -1,0 +1,20 @@
+[project]
+name = "worldcup2026-predictor"
+version = "0.1.0"
+description = "Base repository for a dynamic 2026 World Cup prediction system"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

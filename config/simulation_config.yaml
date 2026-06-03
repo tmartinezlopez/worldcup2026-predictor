@@ -1,0 +1,3 @@
+simulation:
+  status: "placeholder"
+  evaluation_window: "per_batch"
