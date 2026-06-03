@@ -68,3 +68,15 @@ bash scripts/smoke_staging.sh
 This creates a fake import run under `data/staging/imports/`, writes normalized and validated JSONL outputs, and generates validation reports.
 
 The smoke test does not touch PostgreSQL.
+
+## Importer smoke test
+
+```bash
+bash scripts/smoke_importers.sh
+```
+
+Example:
+
+```bash
+python -m src.ingestion.importers.historical_results_importer --input data/raw/sample/historical_results_sample.csv
+```

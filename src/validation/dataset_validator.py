@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Callable
 
 from src.validation.common_checks import (
     check_non_empty,
@@ -19,9 +20,13 @@ class DatasetValidator:
         self,
         required_fields: list[str],
         duplicate_key_fields: list[str] | None = None,
+        custom_checks: (
+            list[Callable[[dict, int | str], list[ValidationIssue]]] | None
+        ) = None,
     ) -> None:
         self.required_fields = required_fields
         self.duplicate_key_fields = duplicate_key_fields or []
+        self.custom_checks = custom_checks or []
 
     def validate(
         self, records: list[dict]
@@ -62,6 +67,8 @@ class DatasetValidator:
             row_issues.extend(
                 check_probability_range(record, probability_fields, row_id)
             )
+            for custom_check in self.custom_checks:
+                row_issues.extend(custom_check(record, row_id))
             row_issues.extend(issues_by_row.get(row_id, []))
 
             if row_issues:

@@ -1,0 +1,4 @@
+full_name,display_name,team,date_of_birth,primary_position,preferred_foot,height_cm,club,is_active
+Kylian Mbappe,K. Mbappe,France,1998-12-20,Forward,Right,178,Real Madrid,true
+Jude Bellingham,,England,2003-06-29,Midfielder,Right,186,Real Madrid,true
+,,Spain,2000-01-01,Midfielder,Left,175,Barcelona,false

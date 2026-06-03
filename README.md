@@ -20,6 +20,7 @@ This phase includes:
 - Dockerized database services
 - Identity resolution foundation for aliases and fuzzy suggestions
 - Safe staging and validation foundation for future data ingestion
+- Base importers for local controlled files
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -28,6 +29,7 @@ This phase does not yet include:
 
 - Predictive model implementation
 - Real external data ingestion
+- Database promotion from staging
 - Tournament orchestration logic
 - Dashboard or reporting UI
 

@@ -1,0 +1,4 @@
+name,official_name,short_name,country_code,fifa_code,confederation,is_active
+United States,United States of America,USA,USA,USA,CONCACAF,true
+France,France National Team,FRA,FRA,FRA,UEFA,true
+,Unknown Team,UNK,,,UEFA,false

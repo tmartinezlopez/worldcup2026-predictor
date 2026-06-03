@@ -1,0 +1,4 @@
+date,kickoff_time,team_a,team_b,competition,stage,matchday,venue,city,country,neutral_site
+2026-06-12,18:00,United States,Mexico,FIFA World Cup,Group Stage,1,Azteca Stadium,Mexico City,Mexico,true
+2026-06-12,21:00,France,France,FIFA World Cup,Group Stage,1,MetLife Stadium,New York,USA,false
+bad-date,20:00,Brazil,Argentina,FIFA World Cup,Group Stage,1,SoFi Stadium,Los Angeles,USA,false

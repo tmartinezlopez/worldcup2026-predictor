@@ -28,3 +28,7 @@
 - `review_report.md` is the human-readable review artifact.
 - Validation is flexible but controlled; problematic rows are reported, not silently dropped.
 - No data promotion to PostgreSQL happens in this phase.
+- Importers are organized by source/type under `src/ingestion/importers`.
+- Importers create staging artifacts only and do not promote to the database in this phase.
+- Small sample files are allowed under `data/raw/sample` for repeatable local smoke tests.
+- Any future real external source must pass a source audit before ingestion is enabled.
