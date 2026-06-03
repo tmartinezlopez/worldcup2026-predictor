@@ -92,3 +92,17 @@ This audits the local historical-results sample and produces:
 - `source_audit_report.json`
 - `source_audit_report.md`
 - `data/staging/source_registry.json`
+
+## Historical results real-source audit
+
+```bash
+bash scripts/audit_historical_results_source.sh
+```
+
+You can also run it with a local file:
+
+```bash
+python -m src.ingestion.source_audits.historical_results_audit --local-file data/raw/sample/historical_results_sample.csv --no-download
+```
+
+The audit downloads the raw CSV in a controlled temporary file when internet is available, writes all outputs under `data/staging/imports/...`, and does not touch PostgreSQL.

@@ -22,6 +22,7 @@ This phase includes:
 - Safe staging and validation foundation for future data ingestion
 - Base importers for local controlled files
 - Source audit framework for controlled evaluation of future real data sources
+- Historical results source audit support
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -87,6 +88,8 @@ Promotion into durable project datasets will be added in a future phase. This ph
 Real candidate sources are still not promoted into PostgreSQL. They are audited first using controlled local samples, and each audit produces explicit JSON and Markdown reports.
 
 A local registry keeps the latest audit decision for each candidate source so we can document acceptance, warnings, or rejection before any real ingestion is enabled.
+
+The audit layer still does not promote anything to the database.
 
 ## Notes
 

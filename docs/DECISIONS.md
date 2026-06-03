@@ -36,3 +36,7 @@
 - Rejected sources stay registered locally so the team does not repeat the same evaluation blindly.
 - License, coverage, quality, and operational risks must be documented during source audit.
 - No large real dataset is downloaded automatically in this phase.
+- The first real candidate source is `martj42/international_results`.
+- Real datasets are audited in a controlled run before any acceptance decision.
+- Real downloaded datasets are not versioned in the repository.
+- License verification remains mandatory before definitive use.

@@ -46,13 +46,22 @@ def normalize_historical_result_record(record: dict) -> dict:
     }
 
 
-def run(input_path):
-    normalized_records = [
-        normalize_historical_result_record(record)
-        for record in load_records(input_path)
-    ]
+def normalize_historical_results(records: list[dict]) -> list[dict]:
+    return [normalize_historical_result_record(record) for record in records]
+
+
+def import_historical_results(
+    input_path,
+    source_name: str = "historical_results_importer",
+    max_rows: int | None = None,
+    metadata: dict | None = None,
+):
+    records = load_records(input_path)
+    if max_rows is not None:
+        records = records[:max_rows]
+    normalized_records = normalize_historical_results(records)
     return run_basic_import(
-        source_name="historical_results_importer",
+        source_name=source_name,
         source_type="historical_results",
         input_path=input_path,
         normalized_records=normalized_records,
@@ -70,7 +79,12 @@ def run(input_path):
             check_record_date,
             check_record_not_future,
         ],
+        metadata=metadata,
     )
+
+
+def run(input_path):
+    return import_historical_results(input_path)
 
 
 def main() -> None:
