@@ -44,3 +44,6 @@
 - Unresolved teams block or skip rows unless a controlled seed/dev mode is explicitly enabled.
 - `--allow-create-teams` is development-only and must not be treated as normal production behavior.
 - Promotion reports are mandatory for every promotion run.
+- Sample seed into PostgreSQL is allowed only for controlled development workflows.
+- `--allow-create-teams` is acceptable only in seed/dev scenarios.
+- The future production flow will still require resolved identity and prior audit before promotion.

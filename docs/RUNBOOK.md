@@ -122,3 +122,18 @@ bash scripts/promote_historical_results.sh <run_dir> --promote --allow-create-te
 ```
 
 Promotion runs in dry-run mode by default. `--promote` is required before any database write happens, and a `promotion_report` is written into the same `run_dir`.
+
+## Development seed
+
+```bash
+bash scripts/seed_sample_historical_results.sh
+```
+
+```bash
+bash scripts/db_counts.sh
+```
+
+After seeding, you can inspect the loaded sample in DBeaver under:
+
+- `Schemas -> public -> Tables -> teams`
+- `Schemas -> public -> Tables -> matches`

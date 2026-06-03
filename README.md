@@ -24,6 +24,7 @@ This phase includes:
 - Source audit framework for controlled evaluation of future real data sources
 - Historical results source audit support
 - Controlled staging-to-database promotion for historical results
+- Development seed support for sample historical results
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -93,6 +94,12 @@ A local registry keeps the latest audit decision for each candidate source so we
 The audit layer still does not promote anything to the database.
 
 Historical-results promotion now exists as a controlled step, but it still requires an explicit flag before any database write happens.
+
+## Development seed
+
+For local development only, `bash scripts/seed_sample_historical_results.sh` can load the sample historical results into PostgreSQL so the resulting `teams`, `team_aliases`, `competitions`, and `matches` are visible in tools like DBeaver.
+
+This script intentionally uses `--allow-create-teams` during the real promote step, which is a development-only escape hatch and must not be treated as a production ingestion flow.
 
 ## Notes
 
