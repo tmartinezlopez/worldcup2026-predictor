@@ -5,7 +5,7 @@ description = "Base repository for a dynamic 2026 World Cup prediction system"
 requires-python = ">=3.11"
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["."]
 testpaths = ["tests"]
 
 [tool.black]

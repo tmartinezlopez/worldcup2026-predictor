@@ -51,6 +51,14 @@ def test_required_files_exist():
         "scripts/reset_db.sh",
         "scripts/check.sh",
         "scripts/run_batch.sh",
+        "scripts/init_db.sh",
+        "scripts/db_healthcheck.sh",
+        "src/db/base.py",
+        "src/db/connection.py",
+        "src/db/models.py",
+        "src/db/init_db.py",
+        "src/db/drop_db.py",
+        "src/db/healthcheck.py",
     ]
 
     for relative_path in expected_files:

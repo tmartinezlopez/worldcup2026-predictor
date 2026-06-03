@@ -15,6 +15,18 @@ Update `.env` with local secrets before starting services.
 bash scripts/start_db.sh
 ```
 
+## Check database connectivity
+
+```bash
+bash scripts/db_healthcheck.sh
+```
+
+## Initialize the schema
+
+```bash
+bash scripts/init_db.sh
+```
+
 ## Stop services
 
 ```bash
@@ -28,6 +40,12 @@ bash scripts/reset_db.sh
 ```
 
 This removes the Docker volume used by the local PostgreSQL instance.
+
+## Drop all tables without resetting Docker
+
+```bash
+python -m src.db.drop_db --yes-i-know
+```
 
 ## Run quality checks
 

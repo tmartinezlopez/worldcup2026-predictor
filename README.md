@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It does not yet implement predictive models, real ingestion pipelines, or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, but it still does not implement predictive models, real ingestion pipelines, or a dashboard.
 
 ## Architecture overview
 
@@ -47,6 +47,24 @@ bash scripts/start_db.sh
 
 Adminer will be available on `http://localhost:8080`.
 
+## Check database connectivity
+
+```bash
+bash scripts/db_healthcheck.sh
+```
+
+## Initialize the schema
+
+```bash
+bash scripts/init_db.sh
+```
+
+## Drop all tables in development
+
+```bash
+python -m src.db.drop_db --yes-i-know
+```
+
 ## Run checks
 
 ```bash
@@ -56,5 +74,6 @@ bash scripts/check.sh
 ## Notes
 
 - PostgreSQL is the source of truth for this project.
+- The schema uses internal IDs across all entities and reserves JSON/JSONB for variable structures.
 - Local Docker PostgreSQL uses port `5433` to avoid conflicts with other local instances.
 - `data/raw/sample/` is intended for small versioned sample inputs only.

@@ -3,6 +3,4 @@
 set -euo pipefail
 
 source .venv/bin/activate
-black --workers 1 src tests
-ruff check src tests
-pytest -q
+python -m src.db.healthcheck
