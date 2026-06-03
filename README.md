@@ -25,6 +25,8 @@ This phase includes:
 - Historical results source audit support
 - Controlled staging-to-database promotion for historical results
 - Development seed support for sample historical results
+- Controlled staging-to-database promotion for fixtures
+- Development seed support for sample fixtures and batches
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -100,6 +102,12 @@ Historical-results promotion now exists as a controlled step, but it still requi
 For local development only, `bash scripts/seed_sample_historical_results.sh` can load the sample historical results into PostgreSQL so the resulting `teams`, `team_aliases`, `competitions`, and `matches` are visible in tools like DBeaver.
 
 This script intentionally uses `--allow-create-teams` during the real promote step, which is a development-only escape hatch and must not be treated as a production ingestion flow.
+
+## Development fixture seed
+
+For local development only, `bash scripts/seed_sample_fixtures.sh` can load the sample fixtures into PostgreSQL, seed minimal `batches`, and assign `batch_matches` so the scheduled sample is visible in DBeaver.
+
+This script also uses `--allow-create-teams` during the real promote step. That is acceptable only for seed/dev workflows and must not be considered the future production fixture flow.
 
 ## Notes
 

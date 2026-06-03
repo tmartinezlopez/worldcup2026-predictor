@@ -133,7 +133,21 @@ bash scripts/seed_sample_historical_results.sh
 bash scripts/db_counts.sh
 ```
 
+```bash
+bash scripts/seed_batches.sh
+```
+
+```bash
+bash scripts/seed_sample_fixtures.sh
+```
+
+```bash
+bash scripts/promote_fixtures.sh <run_dir> --promote --allow-create-teams
+```
+
 After seeding, you can inspect the loaded sample in DBeaver under:
 
 - `Schemas -> public -> Tables -> teams`
 - `Schemas -> public -> Tables -> matches`
+- `Schemas -> public -> Tables -> batches`
+- `Schemas -> public -> Tables -> batch_matches`

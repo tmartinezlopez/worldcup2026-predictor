@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from src.db.connection import get_session
 from src.db.models import (
     Batch,
+    BatchMatch,
     Competition,
     DataSource,
     Match,
@@ -28,6 +29,7 @@ def get_table_counts(session: Session) -> dict[str, int]:
         "matches": Match,
         "data_sources": DataSource,
         "batches": Batch,
+        "batch_matches": BatchMatch,
         "predictions": Prediction,
     }
 
@@ -52,6 +54,7 @@ def main() -> None:
         "matches",
         "data_sources",
         "batches",
+        "batch_matches",
         "predictions",
     ):
         if table_name in counts:

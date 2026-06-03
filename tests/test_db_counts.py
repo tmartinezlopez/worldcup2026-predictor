@@ -1,11 +1,11 @@
 from datetime import date
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from src.db.base import Base
 from src.db.counts import get_table_counts
-from src.db.models import Competition, Match, Team, TeamAlias
+from src.db.models import Batch, BatchMatch, Competition, Match, Team, TeamAlias
 from src.identity.normalizers import normalize_team_name
 
 
@@ -77,6 +77,17 @@ def test_get_table_counts_returns_expected_counts():
             winner_team_id=team_a.id,
         )
     )
+    batch = Batch(
+        code="GROUP_STAGE_MD1",
+        name="Group Stage - Matchday 1",
+        stage="Group Stage",
+        sequence_order=1,
+        status="scheduled",
+    )
+    session.add(batch)
+    session.commit()
+    match = session.scalar(select(Match))
+    session.add(BatchMatch(batch_id=batch.id, match_id=match.id, order_in_batch=1))
     session.commit()
 
     counts = get_table_counts(session)
@@ -85,3 +96,5 @@ def test_get_table_counts_returns_expected_counts():
     assert counts["team_aliases"] == 2
     assert counts["competitions"] == 1
     assert counts["matches"] == 1
+    assert counts["batches"] == 1
+    assert counts["batch_matches"] == 1

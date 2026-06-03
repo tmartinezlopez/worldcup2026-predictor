@@ -47,3 +47,7 @@
 - Sample seed into PostgreSQL is allowed only for controlled development workflows.
 - `--allow-create-teams` is acceptable only in seed/dev scenarios.
 - The future production flow will still require resolved identity and prior audit before promotion.
+- Fixtures also pass through staging and explicit promotion before any database write.
+- Batches represent evaluable tournament tandas and stay explicit in the database.
+- `batch_matches` is the linking layer between batches and scheduled matches.
+- Fixture seed with `--allow-create-teams` is acceptable only for development workflows.

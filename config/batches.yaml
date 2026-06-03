@@ -1,3 +1,52 @@
 batches:
   cutoff_policy: "10_minutes_before_first_match"
-  schedule_source: "pending_definition"
+  schedule_source: "controlled_local_seed"
+  definitions:
+    - code: "GROUP_STAGE_MD1"
+      name: "Group Stage - Matchday 1"
+      stage: "Group Stage"
+      matchday: 1
+      sequence_order: 1
+      status: "scheduled"
+    - code: "GROUP_STAGE_MD2"
+      name: "Group Stage - Matchday 2"
+      stage: "Group Stage"
+      matchday: 2
+      sequence_order: 2
+      status: "scheduled"
+    - code: "GROUP_STAGE_MD3"
+      name: "Group Stage - Matchday 3"
+      stage: "Group Stage"
+      matchday: 3
+      sequence_order: 3
+      status: "scheduled"
+    - code: "ROUND_OF_32"
+      name: "Round of 32"
+      stage: "Round of 32"
+      sequence_order: 4
+      status: "scheduled"
+    - code: "ROUND_OF_16"
+      name: "Round of 16"
+      stage: "Round of 16"
+      sequence_order: 5
+      status: "scheduled"
+    - code: "QUARTER_FINALS"
+      name: "Quarter-finals"
+      stage: "Quarter-finals"
+      sequence_order: 6
+      status: "scheduled"
+    - code: "SEMI_FINALS"
+      name: "Semi-finals"
+      stage: "Semi-finals"
+      sequence_order: 7
+      status: "scheduled"
+    - code: "THIRD_PLACE"
+      name: "Third-place match"
+      stage: "Third Place"
+      sequence_order: 8
+      status: "scheduled"
+    - code: "FINAL"
+      name: "Final"
+      stage: "Final"
+      sequence_order: 9
+      status: "scheduled"
