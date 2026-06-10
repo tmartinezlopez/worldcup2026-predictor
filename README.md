@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, and a final report export MVP, but it still does not implement simulation workflows or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, and a final end-to-end smoke flow, but it still does not implement simulation workflows or a dashboard.
 
 ## Architecture overview
 
@@ -33,6 +33,7 @@ This phase includes:
 - Official Freeze MVP with explicit cutoff-aware workflow
 - End-to-end batch orchestrator MVP
 - Final Report Export MVP
+- Final end-to-end smoke
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -114,6 +115,12 @@ This script intentionally uses `--allow-create-teams` during the real promote st
 For local development only, `bash scripts/seed_sample_fixtures.sh` can load the sample fixtures into PostgreSQL, seed minimal `batches`, and assign `batch_matches` so the scheduled sample is visible in DBeaver.
 
 This script also uses `--allow-create-teams` during the real promote step. That is acceptable only for seed/dev workflows and must not be considered the future production fixture flow.
+
+## Final smoke
+
+```bash
+bash scripts/final_smoke.sh
+```
 
 ## Codex guides
 

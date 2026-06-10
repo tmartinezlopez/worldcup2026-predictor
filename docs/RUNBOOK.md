@@ -204,6 +204,16 @@ bash scripts/export_batch_report.sh GROUP_STAGE_MD1 --include-drafts
 bash scripts/export_batch_report.sh GROUP_STAGE_MD1 --official-only
 ```
 
+## Final smoke
+
+```bash
+bash scripts/final_smoke.sh
+```
+
+```bash
+bash scripts/final_smoke.sh GROUP_STAGE_MD1 poisson
+```
+
 After seeding, you can inspect the loaded sample in DBeaver under:
 
 - `Schemas -> public -> Tables -> teams`

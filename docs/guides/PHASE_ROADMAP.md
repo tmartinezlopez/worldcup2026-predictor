@@ -17,6 +17,7 @@
 - Phase 14/15: evaluation MVP and official freeze MVP
 - Phase 16: end-to-end batch orchestrator MVP
 - Phase 17: final report export MVP
+- Phase 18: final end-to-end smoke script
 
 ## Next
 

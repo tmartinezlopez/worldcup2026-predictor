@@ -65,4 +65,6 @@
 - Reports are generated artifacts and not a source of truth.
 - PostgreSQL remains the source of truth for exported reports.
 - Official predictions are preferred over drafts in report exports.
+- `final_smoke` is a development/demo validation script and not production orchestration.
+- Production execution remains explicit and batch-scoped.
 - Baseline training must fall back safely when the available data is insufficient.
