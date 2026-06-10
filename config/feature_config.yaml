@@ -1,3 +1,4 @@
 features:
-  status: "placeholder"
-  owner: "to_define"
+  version: "v1"
+  recent_form_window_matches: 5
+  recent_form_window_days: 365
