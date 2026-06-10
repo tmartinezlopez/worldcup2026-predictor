@@ -59,4 +59,7 @@
 - Evaluation only uses matches with `status="finished"` and final goals available.
 - Official prediction freezing requires an explicit workflow step.
 - Existing official predictions are not overwritten by a later freeze.
+- Batch orchestration is explicit and scoped to one batch at a time.
+- Official freeze remains opt-in within the orchestrator.
+- Orchestration must preserve the anti-leakage cutoff boundary.
 - Baseline training must fall back safely when the available data is insufficient.

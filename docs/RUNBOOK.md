@@ -61,6 +61,8 @@ Expected model artifacts for this phase:
 - `data/processed/evaluation_reports/<evaluation_result_id>/evaluation_report.md`
 - `data/processed/freeze_reports/<batch_or_timestamp>/freeze_report.json`
 - `data/processed/freeze_reports/<batch_or_timestamp>/freeze_report.md`
+- `data/processed/batch_runs/<batch_or_timestamp>/batch_run_report.json`
+- `data/processed/batch_runs/<batch_or_timestamp>/batch_run_report.md`
 
 ## Identity resolution
 
@@ -180,6 +182,14 @@ bash scripts/evaluate_predictions.sh <model_run_id>
 
 ```bash
 bash scripts/freeze_predictions.sh <model_run_id> <batch_code>
+```
+
+```bash
+bash scripts/run_batch.sh GROUP_STAGE_MD1 poisson
+```
+
+```bash
+bash scripts/run_batch.sh GROUP_STAGE_MD1 poisson --freeze --allow-after-cutoff
 ```
 
 After seeding, you can inspect the loaded sample in DBeaver under:
