@@ -192,6 +192,13 @@ def audit_historical_results_source(
                 "decision": audit_report["decision"],
                 "last_audited_at": audit_report["audited_at"],
                 "latest_report_path": str(json_path),
+                "rows_read": audit_report["rows_read"],
+                "rows_valid": audit_report["rows_valid"],
+                "rows_rejected": audit_report["rows_rejected"],
+                "rejection_rate": audit_report["rejection_rate"],
+                "date_min": audit_report.get("date_min"),
+                "date_max": audit_report.get("date_max"),
+                "risks": audit_report.get("risks", []),
                 "notes": "Controlled historical results source audit.",
             }
         )

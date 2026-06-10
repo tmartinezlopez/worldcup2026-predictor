@@ -18,6 +18,7 @@
 - Phase 16: end-to-end batch orchestrator MVP
 - Phase 17: final report export MVP
 - Phase 18: final end-to-end smoke script
+- Phase 19: real data minimal upgrade
 
 ## Next
 

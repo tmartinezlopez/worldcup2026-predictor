@@ -67,4 +67,8 @@
 - Official predictions are preferred over drafts in report exports.
 - `final_smoke` is a development/demo validation script and not production orchestration.
 - Production execution remains explicit and batch-scoped.
+- Real data must be audited before promotion.
+- `real_data_smoke` does not promote automatically.
+- Real downloaded datasets are not versioned.
+- `--allow-create-teams` remains development-only even in real-data experiments.
 - Baseline training must fall back safely when the available data is insufficient.

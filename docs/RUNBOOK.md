@@ -214,6 +214,24 @@ bash scripts/final_smoke.sh
 bash scripts/final_smoke.sh GROUP_STAGE_MD1 poisson
 ```
 
+## Real data minimal flow
+
+```bash
+bash scripts/real_data_smoke.sh
+```
+
+```bash
+bash scripts/promote_latest_historical_results.sh
+```
+
+```bash
+bash scripts/promote_latest_historical_results.sh --promote
+```
+
+```bash
+bash scripts/promote_latest_historical_results.sh --promote --allow-create-teams
+```
+
 After seeding, you can inspect the loaded sample in DBeaver under:
 
 - `Schemas -> public -> Tables -> teams`

@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, and a final end-to-end smoke flow, but it still does not implement simulation workflows or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, and a minimal real-data audit/promotion upgrade, but it still does not implement simulation workflows or a dashboard.
 
 ## Architecture overview
 
@@ -34,6 +34,7 @@ This phase includes:
 - End-to-end batch orchestrator MVP
 - Final Report Export MVP
 - Final end-to-end smoke
+- Real Data Minimal Upgrade
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -121,6 +122,8 @@ This script also uses `--allow-create-teams` during the real promote step. That 
 ```bash
 bash scripts/final_smoke.sh
 ```
+
+`final_smoke.sh` continues to use versioned sample inputs. `real_data_smoke.sh` audits real historical results in a controlled way, but it does not promote them automatically.
 
 ## Codex guides
 
