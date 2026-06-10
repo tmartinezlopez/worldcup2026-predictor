@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, but it still does not implement predictive models, real ingestion pipelines, or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, and baseline model MVP support, but it still does not implement simulation workflows, advanced evaluation, or a dashboard.
 
 ## Architecture overview
 
@@ -27,15 +27,18 @@ This phase includes:
 - Development seed support for sample historical results
 - Controlled staging-to-database promotion for fixtures
 - Development seed support for sample fixtures and batches
+- Feature Store v1 by batch from trusted PostgreSQL data
+- Baseline Models MVP with draft-only prediction generation
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
 
 This phase does not yet include:
 
-- Predictive model implementation
 - Real external data ingestion
-- Database promotion from staging
+- Monte Carlo simulation
+- Advanced model evaluation
+- Official frozen predictions
 - Tournament orchestration logic
 - Dashboard or reporting UI
 
@@ -108,6 +111,10 @@ This script intentionally uses `--allow-create-teams` during the real promote st
 For local development only, `bash scripts/seed_sample_fixtures.sh` can load the sample fixtures into PostgreSQL, seed minimal `batches`, and assign `batch_matches` so the scheduled sample is visible in DBeaver.
 
 This script also uses `--allow-create-teams` during the real promote step. That is acceptable only for seed/dev workflows and must not be considered the future production fixture flow.
+
+## Codex guides
+
+Persistent project guides for future Codex sessions live under [docs/guides](/home/tomas/Documentos/formación/Hackathon%20Mundial/worldcup2026-predictor/docs/guides).
 
 ## Notes
 

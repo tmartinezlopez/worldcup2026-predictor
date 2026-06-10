@@ -53,6 +53,11 @@ python -m src.db.drop_db --yes-i-know
 bash scripts/check.sh
 ```
 
+Expected model artifacts for this phase:
+
+- `data/processed/model_reports/<model_run_id>/model_report.json`
+- `data/processed/model_reports/<model_run_id>/model_report.md`
+
 ## Identity resolution
 
 - Approved aliases can resolve automatically to internal IDs.
@@ -145,9 +150,33 @@ bash scripts/seed_sample_fixtures.sh
 bash scripts/promote_fixtures.sh <run_dir> --promote --allow-create-teams
 ```
 
+```bash
+bash scripts/build_feature_store.sh <batch_code>
+```
+
+```bash
+bash scripts/train_baseline_model.sh <feature_set_id> majority
+```
+
+```bash
+bash scripts/train_baseline_model.sh <feature_set_id> logistic
+```
+
+```bash
+bash scripts/train_baseline_model.sh <feature_set_id> poisson
+```
+
+```bash
+bash scripts/generate_predictions.sh <model_run_id>
+```
+
 After seeding, you can inspect the loaded sample in DBeaver under:
 
 - `Schemas -> public -> Tables -> teams`
 - `Schemas -> public -> Tables -> matches`
 - `Schemas -> public -> Tables -> batches`
 - `Schemas -> public -> Tables -> batch_matches`
+- `Schemas -> public -> Tables -> feature_sets`
+- `Schemas -> public -> Tables -> match_features`
+- `Schemas -> public -> Tables -> model_runs`
+- `Schemas -> public -> Tables -> predictions`

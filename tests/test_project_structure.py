@@ -48,6 +48,12 @@ def test_required_files_exist():
         "docs/MASTER_DOCUMENT.md",
         "docs/DECISIONS.md",
         "docs/RUNBOOK.md",
+        "docs/guides/CODEX_CONTEXT.md",
+        "docs/guides/ARCHITECTURE_RULES.md",
+        "docs/guides/DATA_PIPELINE_RULES.md",
+        "docs/guides/DB_RULES.md",
+        "docs/guides/DEVELOPMENT_WORKFLOW.md",
+        "docs/guides/PHASE_ROADMAP.md",
         "scripts/setup_dev.sh",
         "scripts/start_db.sh",
         "scripts/stop_db.sh",
@@ -67,6 +73,7 @@ def test_required_files_exist():
         "scripts/smoke_promote_historical_results.sh",
         "scripts/seed_sample_historical_results.sh",
         "scripts/seed_sample_fixtures.sh",
+        "scripts/build_feature_store.sh",
         "src/db/base.py",
         "src/db/connection.py",
         "src/db/models.py",
@@ -88,6 +95,7 @@ def test_required_files_exist():
         "src/validation/common_checks.py",
         "src/validation/dataset_validator.py",
         "src/validation/reporting.py",
+        "src/features/build_feature_store.py",
         "src/ingestion/import_run.py",
         "src/ingestion/importers/base.py",
         "src/ingestion/importers/teams_importer.py",
@@ -129,6 +137,8 @@ def test_required_files_exist():
         "tests/test_batch_seed.py",
         "tests/test_assign_batch_matches.py",
         "tests/test_seed_fixtures_script_contract.py",
+        "tests/test_docs_guides.py",
+        "tests/test_build_feature_store.py",
     ]
 
     for relative_path in expected_files:

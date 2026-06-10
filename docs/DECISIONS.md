@@ -51,3 +51,9 @@
 - Batches represent evaluable tournament tandas and stay explicit in the database.
 - `batch_matches` is the linking layer between batches and scheduled matches.
 - Fixture seed with `--allow-create-teams` is acceptable only for development workflows.
+- Feature store generation is batch-scoped and uses the batch cutoff as an anti-leakage boundary.
+- Feature rows are stored as versioned `features_json` payloads inside `match_features`.
+- Feature generation must only use trusted PostgreSQL data already promoted into the system.
+- Baseline models in the MVP phase may create draft predictions only.
+- Official prediction freezing remains a future explicit workflow step.
+- Baseline training must fall back safely when the available data is insufficient.
