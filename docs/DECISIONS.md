@@ -62,4 +62,7 @@
 - Batch orchestration is explicit and scoped to one batch at a time.
 - Official freeze remains opt-in within the orchestrator.
 - Orchestration must preserve the anti-leakage cutoff boundary.
+- Reports are generated artifacts and not a source of truth.
+- PostgreSQL remains the source of truth for exported reports.
+- Official predictions are preferred over drafts in report exports.
 - Baseline training must fall back safely when the available data is insufficient.
