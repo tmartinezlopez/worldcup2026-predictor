@@ -12,7 +12,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.db.connection import get_session
-from src.db.models import Batch, BatchMatch, FeatureSet, Match, MatchFeature
+from src.db.models import (
+    Batch,
+    BatchMatch,
+    DataSource,
+    ExternalTeamRating,
+    FeatureSet,
+    Match,
+    MatchFeature,
+)
 
 CONFIG_PATH = Path("config/feature_config.yaml")
 REPORTS_ROOT = Path("data/processed/feature_reports")
@@ -29,6 +37,12 @@ FEATURE_NAMES = [
     "goals_for_recent_diff",
     "goals_against_recent_diff",
     "recent_form_points_diff",
+    "team_a_rank",
+    "team_b_rank",
+    "team_a_rating_points",
+    "team_b_rating_points",
+    "rank_diff",
+    "rating_points_diff",
 ]
 
 
@@ -165,15 +179,38 @@ def _recent_team_stats(
 def _features_for_match(
     match: Match,
     finished_matches: list[Match],
+    team_ratings_index: dict[int, dict[str, int | float | None]],
     cutoff_time: datetime,
     config: dict,
     reference_time: datetime,
+    warnings: list[str],
 ) -> dict:
     team_a_stats = _recent_team_stats(
         finished_matches, match.team_a_id, cutoff_time, reference_time, config
     )
     team_b_stats = _recent_team_stats(
         finished_matches, match.team_b_id, cutoff_time, reference_time, config
+    )
+    team_a_rating = team_ratings_index.get(match.team_a_id)
+    team_b_rating = team_ratings_index.get(match.team_b_id)
+    if team_a_rating is None:
+        warnings.append(
+            "missing rating snapshot at or before cutoff for "
+            f"team_a_id={match.team_a_id}"
+        )
+    if team_b_rating is None:
+        warnings.append(
+            "missing rating snapshot at or before cutoff for "
+            f"team_b_id={match.team_b_id}"
+        )
+
+    team_a_rank = None if team_a_rating is None else team_a_rating["rank_value"]
+    team_b_rank = None if team_b_rating is None else team_b_rating["rank_value"]
+    team_a_rating_points = (
+        None if team_a_rating is None else team_a_rating["rating_value"]
+    )
+    team_b_rating_points = (
+        None if team_b_rating is None else team_b_rating["rating_value"]
     )
     return {
         "team_a_id": match.team_a_id,
@@ -194,6 +231,55 @@ def _features_for_match(
         "recent_form_points_diff": (
             team_a_stats["recent_form_points"] - team_b_stats["recent_form_points"]
         ),
+        "team_a_rank": team_a_rank,
+        "team_b_rank": team_b_rank,
+        "team_a_rating_points": team_a_rating_points,
+        "team_b_rating_points": team_b_rating_points,
+        "rank_diff": (
+            None
+            if team_a_rank is None or team_b_rank is None
+            else team_a_rank - team_b_rank
+        ),
+        "rating_points_diff": (
+            None
+            if team_a_rating_points is None or team_b_rating_points is None
+            else round(team_a_rating_points - team_b_rating_points, 6)
+        ),
+    }
+
+
+def _load_team_ratings_index(
+    session: Session,
+    cutoff_time: datetime,
+) -> dict[int, dict[str, int | float | None]]:
+    source_names = {
+        source.id: source.name.casefold()
+        for source in session.scalars(select(DataSource).order_by(DataSource.id)).all()
+    }
+    ratings = session.scalars(
+        select(ExternalTeamRating).where(
+            ExternalTeamRating.rating_date <= cutoff_time.date()
+        )
+    ).all()
+
+    latest_by_team: dict[int, tuple[tuple, ExternalTeamRating]] = {}
+    for rating in ratings:
+        source_name = source_names.get(rating.source_id, "")
+        sort_key = (
+            rating.rating_date,
+            1 if source_name == "fifa" else 0,
+            rating.id,
+        )
+        current = latest_by_team.get(rating.team_id)
+        if current is None or sort_key > current[0]:
+            latest_by_team[rating.team_id] = (sort_key, rating)
+
+    return {
+        team_id: {
+            "rank_value": selected.rank_value,
+            "rating_value": selected.rating_value,
+        }
+        for team_id, (_, selected) in latest_by_team.items()
     }
 
 
@@ -307,6 +393,7 @@ def build_feature_store(
         ).all()
         if _is_before_or_at_cutoff(match, cutoff_time)
     ]
+    team_ratings_index = _load_team_ratings_index(session, cutoff_time)
 
     feature_set = FeatureSet(
         name=f"feature_store_{batch.code}",
@@ -344,9 +431,11 @@ def build_feature_store(
                 features_json=_features_for_match(
                     match,
                     finished_matches,
+                    team_ratings_index,
                     cutoff_time,
                     config,
                     reference_time,
+                    warnings,
                 ),
                 target_result=_target_result(match),
             )
@@ -363,9 +452,11 @@ def build_feature_store(
                 features_json=_features_for_match(
                     match,
                     finished_matches,
+                    team_ratings_index,
                     cutoff_time,
                     config,
                     cutoff_time,
+                    warnings,
                 ),
                 target_result=None,
             )
@@ -384,7 +475,7 @@ def build_feature_store(
         "leakage_check_passed": leakage_check_passed,
         "recent_form_window_matches": config["recent_form_window_matches"],
         "recent_form_window_days": config["recent_form_window_days"],
-        "warnings": warnings,
+        "warnings": sorted(set(warnings)),
     }
     session.flush()
 
@@ -395,7 +486,7 @@ def build_feature_store(
         "training_rows": training_rows,
         "prediction_rows": prediction_rows,
         "features": FEATURE_NAMES,
-        "warnings": warnings,
+        "warnings": sorted(set(warnings)),
         "leakage_check_passed": leakage_check_passed,
     }
     report_dir = _write_feature_report(report_root, feature_set.id, report)

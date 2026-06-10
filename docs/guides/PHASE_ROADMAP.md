@@ -19,14 +19,16 @@
 - Phase 17: final report export MVP
 - Phase 18: final end-to-end smoke script
 - Phase 19: real data minimal upgrade
+- Phase 20: submission polish / delivery pack
+- Phase 21: Monte Carlo simulation MVP
+- Phase 22: rankings / ratings minimal input
 
 ## Next
 
-- simulation
+- dashboard
 
 ## Later roadmap
 
-- simulation
 - evaluation
 - orchestrator
 - dashboard

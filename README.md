@@ -2,7 +2,32 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, and a minimal real-data audit/promotion upgrade, but it still does not implement simulation workflows or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, a minimal real-data audit/promotion upgrade, a Ratings / Rankings Minimal Input upgrade, and a Monte Carlo Simulation MVP, but it still does not implement a dashboard.
+
+## Quick start
+
+```bash
+bash scripts/setup_dev.sh
+cp .env.example .env
+bash scripts/start_db.sh
+bash scripts/final_smoke.sh
+```
+
+Open the main demo report at `data/processed/final_reports/GROUP_STAGE_MD1/batch_report.html`.
+
+Optional real-data audit:
+
+```bash
+bash scripts/real_data_smoke.sh
+```
+
+Optional simulation demo:
+
+```bash
+bash scripts/final_smoke_with_simulation.sh
+```
+
+More detail lives in [docs/SUBMISSION.md](/home/tomas/Documentos/formación/Hackathon%20Mundial/worldcup2026-predictor/docs/SUBMISSION.md) and [docs/RUNBOOK.md](/home/tomas/Documentos/formación/Hackathon%20Mundial/worldcup2026-predictor/docs/RUNBOOK.md).
 
 ## Architecture overview
 
@@ -35,6 +60,8 @@ This phase includes:
 - Final Report Export MVP
 - Final end-to-end smoke
 - Real Data Minimal Upgrade
+- Monte Carlo Simulation MVP
+- Ratings / Rankings Minimal Input
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -42,7 +69,6 @@ This phase includes:
 This phase does not yet include:
 
 - Real external data ingestion
-- Monte Carlo simulation
 - Advanced model evaluation
 - Tournament orchestration logic
 - Dashboard or reporting UI
@@ -124,6 +150,8 @@ bash scripts/final_smoke.sh
 ```
 
 `final_smoke.sh` continues to use versioned sample inputs. `real_data_smoke.sh` audits real historical results in a controlled way, but it does not promote them automatically.
+
+`final_smoke.sh` now also seeds sample team ratings so the feature store can include ranking and rating-point inputs when they are available before the batch cutoff.
 
 ## Codex guides
 

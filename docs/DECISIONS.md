@@ -71,4 +71,11 @@
 - `real_data_smoke` does not promote automatically.
 - Real downloaded datasets are not versioned.
 - `--allow-create-teams` remains development-only even in real-data experiments.
+- Monte Carlo simulation consumes frozen/official predictions when available.
+- Draft predictions may be used in simulation only when explicitly requested.
+- Simulation reports are generated artifacts and not a source of truth.
+- Simulation MVP is batch-scoped and not full tournament bracket orchestration.
 - Baseline training must fall back safely when the available data is insufficient.
+- Ratings and rankings enter through staging and explicit promotion.
+- Ratings used in the feature store must respect the batch cutoff.
+- Missing ratings must not break feature generation or prediction generation.

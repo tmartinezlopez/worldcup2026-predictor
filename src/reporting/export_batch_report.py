@@ -26,6 +26,7 @@ from src.db.models import (
 )
 
 DEFAULT_OUTPUT_DIR = Path("data/processed/final_reports")
+SIMULATION_REPORTS_ROOT = Path("data/processed/simulation_reports")
 
 
 def _ensure_utc(value: datetime | None) -> str | None:
@@ -189,6 +190,14 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
             writer.writerow(row)
 
 
+def _load_simulation_summary(batch_code: str) -> list[dict[str, str]]:
+    csv_path = SIMULATION_REPORTS_ROOT / batch_code / "simulation_results.csv"
+    if not csv_path.is_file():
+        return []
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
 def _write_markdown(path: Path, report: dict[str, Any]) -> None:
     lines = [
         f"# Batch Report: {report['batch_code']}",
@@ -252,6 +261,36 @@ def _write_markdown(path: Path, report: dict[str, Any]) -> None:
         lines.extend(f"- {warning}" for warning in report["warnings"])
     else:
         lines.append("- None.")
+    if report["simulation_summary"]:
+        lines.extend(
+            [
+                "",
+                "## Simulation Summary",
+                "",
+                (
+                    "| Team | Expected Points | Average Rank | P(Top) | P(Bottom) | "
+                    "Wins Avg | Draws Avg | Losses Avg |"
+                ),
+                "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for row in report["simulation_summary"]:
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        str(row.get("team_name") or "-"),
+                        str(row.get("expected_points") or "-"),
+                        str(row.get("average_rank") or "-"),
+                        str(row.get("probability_top_batch") or "-"),
+                        str(row.get("probability_bottom_batch") or "-"),
+                        str(row.get("simulated_wins_avg") or "-"),
+                        str(row.get("simulated_draws_avg") or "-"),
+                        str(row.get("simulated_losses_avg") or "-"),
+                    ]
+                )
+                + " |"
+            )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -290,6 +329,34 @@ def _write_html(path: Path, report: dict[str, Any]) -> None:
     warnings_html = "".join(
         f"<li>{escape(warning)}</li>" for warning in report["warnings"]
     ) or "<li>None.</li>"
+    simulation_rows_html = ""
+    if report["simulation_summary"]:
+        simulation_rows_html = "".join(
+            (
+                "<tr>"
+                f"<td>{escape(str(row.get('team_name') or '-'))}</td>"
+                f"<td>{escape(str(row.get('expected_points') or '-'))}</td>"
+                f"<td>{escape(str(row.get('average_rank') or '-'))}</td>"
+                f"<td>{escape(str(row.get('probability_top_batch') or '-'))}</td>"
+                f"<td>{escape(str(row.get('probability_bottom_batch') or '-'))}</td>"
+                f"<td>{escape(str(row.get('simulated_wins_avg') or '-'))}</td>"
+                f"<td>{escape(str(row.get('simulated_draws_avg') or '-'))}</td>"
+                f"<td>{escape(str(row.get('simulated_losses_avg') or '-'))}</td>"
+                "</tr>"
+            )
+            for row in report["simulation_summary"]
+        )
+    simulation_section_html = ""
+    if report["simulation_summary"]:
+        simulation_section_html = (
+            "<h2>Simulation Summary</h2>"
+            "<table><thead><tr><th>Team</th><th>Expected Points</th>"
+            "<th>Average Rank</th><th>P(Top)</th><th>P(Bottom)</th>"
+            "<th>Wins Avg</th><th>Draws Avg</th><th>Losses Avg</th>"
+            "</tr></thead><tbody>"
+            + simulation_rows_html
+            + "</tbody></table>"
+        )
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -334,6 +401,7 @@ def _write_html(path: Path, report: dict[str, Any]) -> None:
   </table>
   <h2>Warnings</h2>
   <ul class="warnings">{warnings_html}</ul>
+  {simulation_section_html}
 </body>
 </html>
 """
@@ -460,12 +528,14 @@ def export_batch_report(
     }
 
     generated_at = datetime.now(UTC).isoformat()
+    simulation_summary = _load_simulation_summary(batch.code)
     report = {
         "batch_code": batch.code,
         "cutoff_time": _ensure_utc(batch.cutoff_time),
         "generated_at": generated_at,
         "summary": summary,
         "predictions": prediction_rows,
+        "simulation_summary": simulation_summary,
         "warnings": sorted(set(warnings)),
         "options": {
             "official_only": official_only,

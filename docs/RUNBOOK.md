@@ -53,6 +53,24 @@ python -m src.db.drop_db --yes-i-know
 bash scripts/check.sh
 ```
 
+## Fast path
+
+```bash
+bash scripts/final_smoke.sh
+```
+
+```bash
+data/processed/final_reports/GROUP_STAGE_MD1/batch_report.html
+```
+
+```bash
+bash scripts/real_data_smoke.sh
+```
+
+```bash
+bash scripts/seed_sample_team_ratings.sh
+```
+
 Expected model artifacts for this phase:
 
 - `data/processed/model_reports/<model_run_id>/model_report.json`
@@ -204,6 +222,22 @@ bash scripts/export_batch_report.sh GROUP_STAGE_MD1 --include-drafts
 bash scripts/export_batch_report.sh GROUP_STAGE_MD1 --official-only
 ```
 
+```bash
+bash scripts/import_team_ratings.sh data/raw/sample/team_ratings_sample.csv
+```
+
+```bash
+bash scripts/promote_team_ratings.sh <run_dir>
+```
+
+```bash
+bash scripts/promote_team_ratings.sh <run_dir> --promote
+```
+
+```bash
+bash scripts/seed_sample_team_ratings.sh
+```
+
 ## Final smoke
 
 ```bash
@@ -230,6 +264,16 @@ bash scripts/promote_latest_historical_results.sh --promote
 
 ```bash
 bash scripts/promote_latest_historical_results.sh --promote --allow-create-teams
+```
+
+## Simulation
+
+```bash
+bash scripts/run_simulation.sh GROUP_STAGE_MD1 --runs 10000 --include-drafts
+```
+
+```bash
+bash scripts/final_smoke_with_simulation.sh
 ```
 
 After seeding, you can inspect the loaded sample in DBeaver under:
