@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, and baseline model MVP support, but it still does not implement simulation workflows, advanced evaluation, or a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, and Official Freeze MVP, but it still does not implement simulation workflows or a dashboard.
 
 ## Architecture overview
 
@@ -29,6 +29,8 @@ This phase includes:
 - Development seed support for sample fixtures and batches
 - Feature Store v1 by batch from trusted PostgreSQL data
 - Baseline Models MVP with draft-only prediction generation
+- Evaluation MVP for finished matches only
+- Official Freeze MVP with explicit cutoff-aware workflow
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -38,7 +40,6 @@ This phase does not yet include:
 - Real external data ingestion
 - Monte Carlo simulation
 - Advanced model evaluation
-- Official frozen predictions
 - Tournament orchestration logic
 - Dashboard or reporting UI
 

@@ -57,6 +57,10 @@ Expected model artifacts for this phase:
 
 - `data/processed/model_reports/<model_run_id>/model_report.json`
 - `data/processed/model_reports/<model_run_id>/model_report.md`
+- `data/processed/evaluation_reports/<evaluation_result_id>/evaluation_report.json`
+- `data/processed/evaluation_reports/<evaluation_result_id>/evaluation_report.md`
+- `data/processed/freeze_reports/<batch_or_timestamp>/freeze_report.json`
+- `data/processed/freeze_reports/<batch_or_timestamp>/freeze_report.md`
 
 ## Identity resolution
 
@@ -170,6 +174,14 @@ bash scripts/train_baseline_model.sh <feature_set_id> poisson
 bash scripts/generate_predictions.sh <model_run_id>
 ```
 
+```bash
+bash scripts/evaluate_predictions.sh <model_run_id>
+```
+
+```bash
+bash scripts/freeze_predictions.sh <model_run_id> <batch_code>
+```
+
 After seeding, you can inspect the loaded sample in DBeaver under:
 
 - `Schemas -> public -> Tables -> teams`
@@ -180,3 +192,4 @@ After seeding, you can inspect the loaded sample in DBeaver under:
 - `Schemas -> public -> Tables -> match_features`
 - `Schemas -> public -> Tables -> model_runs`
 - `Schemas -> public -> Tables -> predictions`
+- `Schemas -> public -> Tables -> evaluation_results`

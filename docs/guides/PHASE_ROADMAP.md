@@ -14,6 +14,7 @@
 - Phase 11: minimal fixtures and batches support
 - Phase 12: feature store v1
 - Phase 13: baseline models MVP
+- Phase 14/15: evaluation MVP and official freeze MVP
 
 ## Next
 

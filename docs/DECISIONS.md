@@ -55,5 +55,8 @@
 - Feature rows are stored as versioned `features_json` payloads inside `match_features`.
 - Feature generation must only use trusted PostgreSQL data already promoted into the system.
 - Baseline models in the MVP phase may create draft predictions only.
-- Official prediction freezing remains a future explicit workflow step.
+- Evaluation is a workflow explicitly separated from training and prediction generation.
+- Evaluation only uses matches with `status="finished"` and final goals available.
+- Official prediction freezing requires an explicit workflow step.
+- Existing official predictions are not overwritten by a later freeze.
 - Baseline training must fall back safely when the available data is insufficient.
