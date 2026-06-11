@@ -83,13 +83,49 @@ def _write_model_report(report_dir: Path, report: dict[str, Any]) -> None:
         "",
         f"- Model run id: {report['model_run_id']}",
         f"- Model type: `{report['model_type']}`",
+        f"- Model family: `{report['model_family']}`",
         f"- Feature set id: {report['feature_set_id']}",
         f"- Training rows: {report['training_rows']}",
         f"- Prediction rows available: {report['prediction_rows_available']}",
         f"- Fallback used: `{report['fallback_used']}`",
+        f"- Fallback reason: `{report.get('fallback_reason')}`",
         "",
-        "## Metrics",
+        "## Features Used",
     ]
+    features_used = report.get("features_used") or []
+    if features_used:
+        lines.extend(f"- `{feature_name}`" for feature_name in features_used)
+    else:
+        lines.append("- None.")
+    lines.extend(
+        [
+            "",
+            "## Class Distribution",
+        ]
+    )
+    class_distribution = report.get("class_distribution") or {}
+    if class_distribution:
+        for label, value in sorted(class_distribution.items()):
+            lines.append(f"- `{label}`: {value}")
+    else:
+        lines.append("- None.")
+    lines.extend(
+        [
+            "",
+            "## Data Quality Warnings",
+        ]
+    )
+    data_quality_warnings = report.get("data_quality_warnings") or []
+    if data_quality_warnings:
+        lines.extend(f"- {warning}" for warning in data_quality_warnings)
+    else:
+        lines.append("- None.")
+    lines.extend(
+        [
+            "",
+        "## Metrics",
+        ]
+    )
     for key, value in sorted(report["metrics"].items()):
         lines.append(f"- `{key}`: {value}")
     lines.extend(["", "## Warnings"])
@@ -140,6 +176,11 @@ def train_baseline_model(
     class_distribution = Counter(
         row.target_result for row in training_rows if row.target_result
     )
+    features_used = list(getattr(model, "feature_names_", []))
+    fallback_reason = getattr(model, "fallback_reason_", None)
+    data_quality_warnings = list(
+        (feature_set.data_coverage_json or {}).get("data_quality_warnings", [])
+    )
     metrics = {
         "training_rows": len(training_rows),
         "prediction_rows_available": len(prediction_rows),
@@ -149,7 +190,16 @@ def train_baseline_model(
         "train_accuracy": _training_accuracy(training_rows, model),
         "train_log_loss": _multiclass_log_loss(training_rows, model),
         "fallback_used": bool(getattr(model, "fallback_used_", False)),
-        "fallback_reason": getattr(model, "fallback_reason_", None),
+        "fallback_reason": fallback_reason,
+        "features_used": features_used,
+        "model_family": model_type,
+        "data_quality_warnings": data_quality_warnings,
+        "poisson_adjustments_used": bool(
+            getattr(model, "poisson_adjustments_used_", False)
+        ),
+        "adjustment_features_used": list(
+            getattr(model, "adjustment_features_used_", [])
+        ),
     }
     warnings = list(getattr(model, "warnings_", []))
 
@@ -162,6 +212,8 @@ def train_baseline_model(
         feature_set_id=feature_set.id,
         features_used_json={
             "model_type": model_type,
+            "model_family": model_type,
+            "features_used": features_used,
             "feature_set_version": feature_set.version,
             "feature_config": feature_set.feature_config_json or {},
         },
@@ -186,10 +238,17 @@ def train_baseline_model(
     report = {
         "model_run_id": model_run.id,
         "model_type": model_type,
+        "model_family": model_type,
         "feature_set_id": feature_set.id,
         "training_rows": len(training_rows),
         "prediction_rows_available": len(prediction_rows),
         "metrics": metrics,
+        "features_used": features_used,
+        "fallback_reason": fallback_reason,
+        "class_distribution": metrics["class_distribution"],
+        "data_quality_warnings": data_quality_warnings,
+        "poisson_adjustments_used": metrics["poisson_adjustments_used"],
+        "adjustment_features_used": metrics["adjustment_features_used"],
         "warnings": warnings,
         "fallback_used": bool(getattr(model, "fallback_used_", False)),
         "artifact_path": str(artifact_path),

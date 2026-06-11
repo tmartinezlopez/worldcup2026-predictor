@@ -44,17 +44,38 @@ def _write_model_report(report_dir: Path, report: dict[str, Any]) -> None:
         "",
         f"- Model run id: {report['model_run_id']}",
         f"- Model type: `{report['model_type']}`",
+        f"- Model family: `{report.get('model_family', report['model_type'])}`",
         f"- Feature set id: {report['feature_set_id']}",
         f"- Training rows: {report['training_rows']}",
         f"- Prediction rows available: {report['prediction_rows_available']}",
         f"- Predictions created: {report.get('predictions_created', 0)}",
         f"- Predictions skipped: {report.get('predictions_skipped', 0)}",
         f"- Fallback used: `{report['fallback_used']}`",
+        f"- Fallback reason: `{report.get('fallback_reason')}`",
         "",
-        "## Metrics",
+        "## Features Used",
     ]
+    features_used = report.get("features_used") or []
+    if features_used:
+        lines.extend(f"- `{feature_name}`" for feature_name in features_used)
+    else:
+        lines.append("- None.")
+    lines.extend(["", "## Metrics"])
     for key, value in sorted((report.get("metrics") or {}).items()):
         lines.append(f"- `{key}`: {value}")
+    lines.extend(["", "## Class Distribution"])
+    class_distribution = report.get("class_distribution") or {}
+    if class_distribution:
+        for key, value in sorted(class_distribution.items()):
+            lines.append(f"- `{key}`: {value}")
+    else:
+        lines.append("- None.")
+    lines.extend(["", "## Data Quality Warnings"])
+    data_quality_warnings = report.get("data_quality_warnings") or []
+    if data_quality_warnings:
+        lines.extend(f"- {warning}" for warning in data_quality_warnings)
+    else:
+        lines.append("- None.")
     lines.extend(["", "## Warnings"])
     warnings = report.get("warnings") or []
     if warnings:
@@ -177,10 +198,32 @@ def generate_predictions(
                 "model_type",
                 model_run.model_name,
             ),
+            "model_family": (model_run.features_used_json or {}).get(
+                "model_family",
+                (model_run.features_used_json or {}).get(
+                    "model_type",
+                    model_run.model_name,
+                ),
+            ),
             "feature_set_id": feature_set.id,
             "training_rows": (model_run.metrics_json or {}).get("training_rows", 0),
             "prediction_rows_available": len(prediction_rows),
             "metrics": model_run.metrics_json or {},
+            "features_used": (model_run.features_used_json or {}).get(
+                "features_used",
+                [],
+            ),
+            "fallback_reason": (model_run.metrics_json or {}).get(
+                "fallback_reason"
+            ),
+            "class_distribution": (model_run.metrics_json or {}).get(
+                "class_distribution",
+                {},
+            ),
+            "data_quality_warnings": (model_run.metrics_json or {}).get(
+                "data_quality_warnings",
+                [],
+            ),
             "warnings": sorted(set([*(report.get("warnings") or []), *warnings])),
             "fallback_used": bool(
                 (model_run.metrics_json or {}).get("fallback_used", False)

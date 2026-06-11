@@ -186,6 +186,8 @@ bash scripts/promote_fixtures.sh <run_dir> --promote --allow-create-teams
 bash scripts/build_feature_store.sh <batch_code>
 ```
 
+The feature store now includes rating/ranking inputs and last-5 historical form features when they are available before the batch cutoff.
+
 ```bash
 bash scripts/train_baseline_model.sh <feature_set_id> majority
 ```

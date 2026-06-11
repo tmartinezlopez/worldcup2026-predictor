@@ -10,18 +10,15 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 
 RESULT_LABELS = ("team_a_win", "draw", "team_b_win")
-NUMERIC_FEATURE_NAMES = (
-    "team_a_id",
-    "team_b_id",
-    "is_knockout",
-    "neutral_site",
-    "team_a_goals_for_recent",
-    "team_b_goals_for_recent",
-    "team_a_goals_against_recent",
-    "team_b_goals_against_recent",
-    "goals_for_recent_diff",
-    "goals_against_recent_diff",
-    "recent_form_points_diff",
+LOGISTIC_CANDIDATE_FEATURE_NAMES = (
+    "rating_points_diff",
+    "rank_diff",
+    "points_last_5_diff",
+    "goal_diff_last_5_diff",
+    "team_a_rating_points",
+    "team_b_rating_points",
+    "team_a_points_last_5",
+    "team_b_points_last_5",
 )
 
 
@@ -157,7 +154,7 @@ class LogisticRegressionBaseline:
 
     def __init__(self, *, min_training_rows: int = 5) -> None:
         self.min_training_rows = int(min_training_rows)
-        self.feature_names_ = list(NUMERIC_FEATURE_NAMES)
+        self.feature_names_ = list(LOGISTIC_CANDIDATE_FEATURE_NAMES)
         self.model_: LogisticRegression | None = None
         self.fallback_model_ = MajorityClassBaseline()
         self.fallback_used_ = False
@@ -165,6 +162,9 @@ class LogisticRegressionBaseline:
         self.warnings_: list[str] = []
         self.training_rows_: int = 0
         self.observed_classes_: list[str] = []
+        self.class_distribution_: dict[str, int] = {
+            label: 0 for label in RESULT_LABELS
+        }
 
     def _vectorize(self, features_json: dict[str, Any]) -> list[float]:
         values: list[float] = []
@@ -191,6 +191,13 @@ class LogisticRegressionBaseline:
         self.observed_classes_ = sorted(
             {_row_target(row) for row in labeled_rows if _row_target(row)}
         )
+        counts = Counter(
+            target for target in (_row_target(row) for row in labeled_rows) if target
+        )
+        self.class_distribution_ = {
+            label: int(counts.get(label, 0)) for label in RESULT_LABELS
+        }
+        self.feature_names_ = self._select_feature_names(labeled_rows)
 
         if self.training_rows_ < self.min_training_rows:
             self._use_fallback(
@@ -207,6 +214,13 @@ class LogisticRegressionBaseline:
             )
             return self
 
+        if not self.feature_names_:
+            self._use_fallback(
+                rows,
+                "no supported logistic features were available in the feature rows",
+            )
+            return self
+
         x_train = np.array(
             [self._vectorize(_row_features(row)) for row in labeled_rows]
         )
@@ -217,6 +231,13 @@ class LogisticRegressionBaseline:
         self.fallback_reason_ = None
         self.warnings_ = []
         return self
+
+    def _select_feature_names(self, rows: list[Any]) -> list[str]:
+        selected: list[str] = []
+        for name in LOGISTIC_CANDIDATE_FEATURE_NAMES:
+            if any(_row_features(row).get(name) is not None for row in rows):
+                selected.append(name)
+        return selected
 
     def _use_fallback(self, rows: list[Any], reason: str) -> None:
         self.fallback_model_.fit(rows)
@@ -252,6 +273,9 @@ class SimplePoissonBaseline:
         self.fallback_used_ = False
         self.fallback_reason_: str | None = None
         self.warnings_: list[str] = []
+        self.poisson_adjustments_used_ = False
+        self.adjustment_features_used_: list[str] = []
+        self.last_expected_goals_: tuple[float, float] | None = None
 
     def fit(
         self,
@@ -279,7 +303,16 @@ class SimplePoissonBaseline:
             self.default_expected_goals_b_ = max(
                 0.2, float(sum(expected_goals_b_values) / len(expected_goals_b_values))
             )
+        self.adjustment_features_used_ = self._detect_adjustment_features(rows)
+        self.poisson_adjustments_used_ = bool(self.adjustment_features_used_)
         return self
+
+    def _detect_adjustment_features(self, rows: list[Any]) -> list[str]:
+        selected: list[str] = []
+        for name in ("rating_points_diff", "goal_diff_last_5_diff"):
+            if any(_row_features(row).get(name) is not None for row in rows):
+                selected.append(name)
+        return selected
 
     def _safe_recent_average(self, value: Any) -> float | None:
         try:
@@ -318,7 +351,45 @@ class SimplePoissonBaseline:
             expected_goals_b = self.default_expected_goals_b_
             self.fallback_used_ = True
 
+        expected_goals_a, expected_goals_b = self._apply_adjustments(
+            features_json,
+            expected_goals_a,
+            expected_goals_b,
+        )
+        self.last_expected_goals_ = (expected_goals_a, expected_goals_b)
         return max(0.05, expected_goals_a), max(0.05, expected_goals_b)
+
+    def _apply_adjustments(
+        self,
+        features_json: dict[str, Any],
+        expected_goals_a: float,
+        expected_goals_b: float,
+    ) -> tuple[float, float]:
+        adjustment = 0.0
+
+        rating_points_diff = self._safe_float(features_json.get("rating_points_diff"))
+        if rating_points_diff is not None:
+            bounded_rating = max(-400.0, min(400.0, rating_points_diff))
+            adjustment += bounded_rating / 2000.0
+
+        goal_diff_last_5_diff = self._safe_float(
+            features_json.get("goal_diff_last_5_diff")
+        )
+        if goal_diff_last_5_diff is not None:
+            bounded_goal_diff = max(-10.0, min(10.0, goal_diff_last_5_diff))
+            adjustment += bounded_goal_diff / 50.0
+
+        adjustment = max(-0.25, min(0.25, adjustment))
+        return (
+            max(0.05, expected_goals_a + adjustment),
+            max(0.05, expected_goals_b - adjustment),
+        )
+
+    def _safe_float(self, value: Any) -> float | None:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
 
     def _poisson_pmf(self, goals: int, lambda_value: float) -> float:
         return math.exp(-lambda_value) * (lambda_value**goals) / math.factorial(goals)

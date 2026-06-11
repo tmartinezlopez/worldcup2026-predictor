@@ -79,6 +79,9 @@
 - Ratings and rankings enter through staging and explicit promotion.
 - Ratings used in the feature store must respect the batch cutoff.
 - Missing ratings must not break feature generation or prediction generation.
+- Historical form features must be cutoff-aware.
+- Baseline models may use ratings and form features but must fallback safely.
+- Model reports must disclose features used and fallback reasons.
 - World Cup fixture samples are real-like demo inputs and not official fixtures.
 - Real official fixtures must be audited and versioned before production use.
 - Batch assignment from World Cup fixtures is explicit and report-generating.

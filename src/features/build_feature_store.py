@@ -37,6 +37,18 @@ FEATURE_NAMES = [
     "goals_for_recent_diff",
     "goals_against_recent_diff",
     "recent_form_points_diff",
+    "team_a_matches_last_5",
+    "team_b_matches_last_5",
+    "team_a_points_last_5",
+    "team_b_points_last_5",
+    "team_a_goals_for_last_5",
+    "team_b_goals_for_last_5",
+    "team_a_goals_against_last_5",
+    "team_b_goals_against_last_5",
+    "team_a_goal_diff_last_5",
+    "team_b_goal_diff_last_5",
+    "points_last_5_diff",
+    "goal_diff_last_5_diff",
     "team_a_rank",
     "team_b_rank",
     "team_a_rating_points",
@@ -157,6 +169,17 @@ def _recent_team_stats(
         key=lambda item: _match_datetime(item) or datetime.min.replace(tzinfo=UTC)
     )
     recent_matches = relevant_matches[-int(config["recent_form_window_matches"]) :]
+    if not recent_matches:
+        return {
+            "matches_last_5": 0,
+            "points_last_5": 0,
+            "goals_for_last_5": 0,
+            "goals_against_last_5": 0,
+            "goal_diff_last_5": 0,
+            "goals_for_recent": 0,
+            "goals_against_recent": 0,
+            "recent_form_points": 0,
+        }
 
     goals_for = 0
     goals_against = 0
@@ -170,6 +193,11 @@ def _recent_team_stats(
         recent_form_points += match_points
 
     return {
+        "matches_last_5": len(recent_matches),
+        "points_last_5": recent_form_points,
+        "goals_for_last_5": goals_for,
+        "goals_against_last_5": goals_against,
+        "goal_diff_last_5": goals_for - goals_against,
         "goals_for_recent": goals_for,
         "goals_against_recent": goals_against,
         "recent_form_points": recent_form_points,
@@ -193,6 +221,16 @@ def _features_for_match(
     )
     team_a_rating = team_ratings_index.get(match.team_a_id)
     team_b_rating = team_ratings_index.get(match.team_b_id)
+    if team_a_stats["matches_last_5"] == 0:
+        warnings.append(
+            "missing historical form before cutoff for "
+            f"team_a_id={match.team_a_id}; defaulting last-5 features to 0"
+        )
+    if team_b_stats["matches_last_5"] == 0:
+        warnings.append(
+            "missing historical form before cutoff for "
+            f"team_b_id={match.team_b_id}; defaulting last-5 features to 0"
+        )
     if team_a_rating is None:
         warnings.append(
             "missing rating snapshot at or before cutoff for "
@@ -230,6 +268,22 @@ def _features_for_match(
         ),
         "recent_form_points_diff": (
             team_a_stats["recent_form_points"] - team_b_stats["recent_form_points"]
+        ),
+        "team_a_matches_last_5": team_a_stats["matches_last_5"],
+        "team_b_matches_last_5": team_b_stats["matches_last_5"],
+        "team_a_points_last_5": team_a_stats["points_last_5"],
+        "team_b_points_last_5": team_b_stats["points_last_5"],
+        "team_a_goals_for_last_5": team_a_stats["goals_for_last_5"],
+        "team_b_goals_for_last_5": team_b_stats["goals_for_last_5"],
+        "team_a_goals_against_last_5": team_a_stats["goals_against_last_5"],
+        "team_b_goals_against_last_5": team_b_stats["goals_against_last_5"],
+        "team_a_goal_diff_last_5": team_a_stats["goal_diff_last_5"],
+        "team_b_goal_diff_last_5": team_b_stats["goal_diff_last_5"],
+        "points_last_5_diff": (
+            team_a_stats["points_last_5"] - team_b_stats["points_last_5"]
+        ),
+        "goal_diff_last_5_diff": (
+            team_a_stats["goal_diff_last_5"] - team_b_stats["goal_diff_last_5"]
         ),
         "team_a_rank": team_a_rank,
         "team_b_rank": team_b_rank,
@@ -343,6 +397,11 @@ def _write_feature_report(report_root: Path, feature_set_id: int, report: dict) 
         f"- Training rows: {report['training_rows']}",
         f"- Prediction rows: {report['prediction_rows']}",
         f"- Leakage check passed: `{report['leakage_check_passed']}`",
+        (
+            "- Historical form features present: "
+            f"`{report['historical_form_features_present']}`"
+        ),
+        f"- Rating features present: `{report['rating_features_present']}`",
         "",
         "## Features",
     ]
@@ -475,6 +534,9 @@ def build_feature_store(
         "leakage_check_passed": leakage_check_passed,
         "recent_form_window_matches": config["recent_form_window_matches"],
         "recent_form_window_days": config["recent_form_window_days"],
+        "historical_form_features_present": True,
+        "rating_features_present": bool(team_ratings_index),
+        "data_quality_warnings": sorted(set(warnings)),
         "warnings": sorted(set(warnings)),
     }
     session.flush()
@@ -487,6 +549,9 @@ def build_feature_store(
         "prediction_rows": prediction_rows,
         "features": FEATURE_NAMES,
         "warnings": sorted(set(warnings)),
+        "historical_form_features_present": True,
+        "rating_features_present": bool(team_ratings_index),
+        "data_quality_warnings": sorted(set(warnings)),
         "leakage_check_passed": leakage_check_passed,
     }
     report_dir = _write_feature_report(report_root, feature_set.id, report)

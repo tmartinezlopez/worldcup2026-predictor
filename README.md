@@ -69,6 +69,7 @@ This phase includes:
 - Monte Carlo Simulation MVP
 - Ratings / Rankings Minimal Input
 - Real Fixtures Minimal
+- Stronger Baseline Features
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests

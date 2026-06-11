@@ -23,6 +23,7 @@
 - Phase 21: Monte Carlo simulation MVP
 - Phase 22: rankings / ratings minimal input
 - Phase 23: real fixtures minimal
+- Phase 24: stronger baseline features/model rebuild
 
 ## Next
 
