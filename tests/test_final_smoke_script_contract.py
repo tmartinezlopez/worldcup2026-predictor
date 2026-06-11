@@ -13,6 +13,7 @@ def test_final_smoke_script_contains_expected_steps():
     assert "start_db.sh" in content
     assert "seed_sample_historical_results.sh" in content
     assert "seed_sample_fixtures.sh" in content
+    assert "seed_sample_team_ratings.sh" in content
     assert "run_batch.sh" in content
     assert "export_batch_report.sh" in content
     assert "FINAL SMOKE PASSED" in content

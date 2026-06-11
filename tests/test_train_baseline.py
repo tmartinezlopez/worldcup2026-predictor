@@ -162,6 +162,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": 4,
                 "goals_against_recent_diff": -3,
                 "recent_form_points_diff": 6,
+                "rating_points_diff": 25.0,
+                "rank_diff": -3,
+                "points_last_5_diff": 6,
+                "goal_diff_last_5_diff": 5,
+                "team_a_rating_points": 1660.0,
+                "team_b_rating_points": 1635.0,
+                "team_a_points_last_5": 12,
+                "team_b_points_last_5": 6,
             },
             target_result="team_a_win",
         ),
@@ -182,6 +190,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": 0,
                 "goals_against_recent_diff": 0,
                 "recent_form_points_diff": 0,
+                "rating_points_diff": 0.0,
+                "rank_diff": 0,
+                "points_last_5_diff": 0,
+                "goal_diff_last_5_diff": 0,
+                "team_a_rating_points": 1600.0,
+                "team_b_rating_points": 1600.0,
+                "team_a_points_last_5": 7,
+                "team_b_points_last_5": 7,
             },
             target_result="draw",
         ),
@@ -202,6 +218,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": 3,
                 "goals_against_recent_diff": -1,
                 "recent_form_points_diff": 3,
+                "rating_points_diff": 15.0,
+                "rank_diff": -2,
+                "points_last_5_diff": 4,
+                "goal_diff_last_5_diff": 3,
+                "team_a_rating_points": 1640.0,
+                "team_b_rating_points": 1625.0,
+                "team_a_points_last_5": 9,
+                "team_b_points_last_5": 5,
             },
             target_result="team_a_win",
         ),
@@ -222,6 +246,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": 1,
                 "goals_against_recent_diff": -3,
                 "recent_form_points_diff": 3,
+                "rating_points_diff": 10.0,
+                "rank_diff": -1,
+                "points_last_5_diff": 3,
+                "goal_diff_last_5_diff": 2,
+                "team_a_rating_points": 1630.0,
+                "team_b_rating_points": 1620.0,
+                "team_a_points_last_5": 8,
+                "team_b_points_last_5": 5,
             },
             target_result="team_a_win",
         ),
@@ -242,6 +274,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": -6,
                 "goals_against_recent_diff": 5,
                 "recent_form_points_diff": -6,
+                "rating_points_diff": -30.0,
+                "rank_diff": 4,
+                "points_last_5_diff": -7,
+                "goal_diff_last_5_diff": -6,
+                "team_a_rating_points": 1590.0,
+                "team_b_rating_points": 1620.0,
+                "team_a_points_last_5": 2,
+                "team_b_points_last_5": 9,
             },
             target_result="team_b_win",
         ),
@@ -262,6 +302,14 @@ def _seed_feature_set_with_rows(session):
                 "goals_for_recent_diff": 0,
                 "goals_against_recent_diff": -2,
                 "recent_form_points_diff": 1,
+                "rating_points_diff": 8.0,
+                "rank_diff": -1,
+                "points_last_5_diff": 2,
+                "goal_diff_last_5_diff": 1,
+                "team_a_rating_points": 1628.0,
+                "team_b_rating_points": 1620.0,
+                "team_a_points_last_5": 8,
+                "team_b_points_last_5": 6,
             },
             target_result=None,
         ),
@@ -335,6 +383,14 @@ def test_handles_insufficient_training_gracefully(tmp_path):
                 "goals_for_recent_diff": 4,
                 "goals_against_recent_diff": -2,
                 "recent_form_points_diff": 3,
+                "rating_points_diff": 12.0,
+                "rank_diff": -1,
+                "points_last_5_diff": 3,
+                "goal_diff_last_5_diff": 2,
+                "team_a_rating_points": 1620.0,
+                "team_b_rating_points": 1608.0,
+                "team_a_points_last_5": 8,
+                "team_b_points_last_5": 5,
             },
             target_result="team_a_win",
         )
@@ -353,3 +409,31 @@ def test_handles_insufficient_training_gracefully(tmp_path):
     assert report["fallback_used"] is True
     assert model_run.metrics_json["fallback_used"] is True
     assert model_run.metrics_json["fallback_reason"] is not None
+
+
+def test_model_report_includes_features_and_fallback_metadata(tmp_path):
+    session = _session()
+    feature_set = _seed_feature_set_with_rows(session)
+    feature_set.data_coverage_json = {
+        "data_quality_warnings": [
+            "missing rating snapshot at or before cutoff for team_b_id=2"
+        ]
+    }
+    session.commit()
+
+    report = train_baseline_model(
+        session,
+        feature_set_id=feature_set.id,
+        model_type="logistic",
+        report_root=tmp_path / "model_reports",
+    )
+
+    model_run = session.scalar(select(ModelRun))
+
+    assert "rating_points_diff" in report["features_used"]
+    assert report["class_distribution"]["team_a_win"] == 3
+    assert report["data_quality_warnings"] == [
+        "missing rating snapshot at or before cutoff for team_b_id=2"
+    ]
+    assert model_run.features_used_json["features_used"] == report["features_used"]
+    assert model_run.metrics_json["features_used"] == report["features_used"]

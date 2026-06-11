@@ -28,6 +28,14 @@ def _row(target_result, **features):
             "goals_for_recent_diff": features.get("goals_for_recent_diff", 2),
             "goals_against_recent_diff": features.get("goals_against_recent_diff", -2),
             "recent_form_points_diff": features.get("recent_form_points_diff", 3),
+            "rating_points_diff": features.get("rating_points_diff", 15.0),
+            "rank_diff": features.get("rank_diff", -2),
+            "points_last_5_diff": features.get("points_last_5_diff", 4),
+            "goal_diff_last_5_diff": features.get("goal_diff_last_5_diff", 3),
+            "team_a_rating_points": features.get("team_a_rating_points", 1650.0),
+            "team_b_rating_points": features.get("team_b_rating_points", 1635.0),
+            "team_a_points_last_5": features.get("team_a_points_last_5", 10),
+            "team_b_points_last_5": features.get("team_b_points_last_5", 6),
         },
     }
 
@@ -106,3 +114,29 @@ def test_poisson_outputs_valid_probabilities():
     assert 0 <= payload["draw_probability"] <= 1
     assert 0 <= payload["away_win_probability"] <= 1
     assert _probability_sum(payload) == pytest.approx(1.0, abs=1e-6)
+
+
+def test_poisson_adjustment_keeps_lambdas_positive():
+    model = SimplePoissonBaseline().fit(
+        [
+            _row("team_a_win", rating_points_diff=25.0, goal_diff_last_5_diff=4),
+            _row("team_b_win", rating_points_diff=-20.0, goal_diff_last_5_diff=-3),
+        ],
+        feature_config={"recent_form_window_matches": 5},
+    )
+
+    payload = model.predict_match(
+        _row(
+            None,
+            team_a_goals_for_recent=0,
+            team_b_goals_for_recent=0,
+            team_a_goals_against_recent=0,
+            team_b_goals_against_recent=0,
+            rating_points_diff=-9999.0,
+            goal_diff_last_5_diff=-9999.0,
+        )["features_json"]
+    )
+
+    assert model.poisson_adjustments_used_ is True
+    assert payload["expected_goals_a"] > 0
+    assert payload["expected_goals_b"] > 0

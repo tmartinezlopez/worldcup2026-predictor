@@ -40,6 +40,9 @@ bash scripts/seed_sample_historical_results.sh
 step "Seeding sample fixtures and batches"
 bash scripts/seed_sample_fixtures.sh
 
+step "Seeding sample team ratings"
+bash scripts/seed_sample_team_ratings.sh
+
 step "Running end-to-end batch orchestration"
 bash scripts/run_batch.sh "$batch_code" "$model_type" --freeze --allow-after-cutoff
 
