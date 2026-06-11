@@ -71,6 +71,10 @@ bash scripts/real_data_smoke.sh
 bash scripts/seed_sample_team_ratings.sh
 ```
 
+```bash
+bash scripts/worldcup2026_minimal_smoke.sh
+```
+
 Expected model artifacts for this phase:
 
 - `data/processed/model_reports/<model_run_id>/model_report.json`
@@ -236,6 +240,28 @@ bash scripts/promote_team_ratings.sh <run_dir> --promote
 
 ```bash
 bash scripts/seed_sample_team_ratings.sh
+```
+
+## World Cup 2026 minimal fixtures
+
+```bash
+bash scripts/import_worldcup_fixtures.sh data/raw/sample/worldcup2026_fixtures_minimal_sample.csv
+```
+
+```bash
+bash scripts/promote_worldcup_fixtures.sh <run_dir>
+```
+
+```bash
+bash scripts/promote_worldcup_fixtures.sh <run_dir> --promote --allow-create-teams
+```
+
+```bash
+bash scripts/assign_worldcup_batches.sh --promote
+```
+
+```bash
+bash scripts/worldcup2026_minimal_smoke.sh
 ```
 
 ## Final smoke

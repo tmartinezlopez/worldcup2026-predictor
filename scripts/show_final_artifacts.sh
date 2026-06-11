@@ -20,7 +20,8 @@ latest_dir() {
   find "$root" -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1
 }
 
-report_root="data/processed/final_reports/GROUP_STAGE_MD1"
+batch_code="${1:-GROUP_STAGE_MD1}"
+report_root="data/processed/final_reports/$batch_code"
 
 show_file "final_report_html" "$report_root/batch_report.html"
 show_file "final_report_md" "$report_root/batch_report.md"

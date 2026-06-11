@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, a minimal real-data audit/promotion upgrade, a Ratings / Rankings Minimal Input upgrade, and a Monte Carlo Simulation MVP, but it still does not implement a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, a minimal real-data audit/promotion upgrade, a Ratings / Rankings Minimal Input upgrade, a Real Fixtures Minimal upgrade, and a Monte Carlo Simulation MVP, but it still does not implement a dashboard.
 
 ## Quick start
 
@@ -25,6 +25,12 @@ Optional simulation demo:
 
 ```bash
 bash scripts/final_smoke_with_simulation.sh
+```
+
+Optional World Cup 2026 minimal fixtures demo:
+
+```bash
+bash scripts/worldcup2026_minimal_smoke.sh
 ```
 
 More detail lives in [docs/SUBMISSION.md](/home/tomas/Documentos/formación/Hackathon%20Mundial/worldcup2026-predictor/docs/SUBMISSION.md) and [docs/RUNBOOK.md](/home/tomas/Documentos/formación/Hackathon%20Mundial/worldcup2026-predictor/docs/RUNBOOK.md).
@@ -62,6 +68,7 @@ This phase includes:
 - Real Data Minimal Upgrade
 - Monte Carlo Simulation MVP
 - Ratings / Rankings Minimal Input
+- Real Fixtures Minimal
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -69,6 +76,7 @@ This phase includes:
 This phase does not yet include:
 
 - Real external data ingestion
+- Official World Cup 2026 fixtures ingestion
 - Advanced model evaluation
 - Tournament orchestration logic
 - Dashboard or reporting UI
@@ -152,6 +160,8 @@ bash scripts/final_smoke.sh
 `final_smoke.sh` continues to use versioned sample inputs. `real_data_smoke.sh` audits real historical results in a controlled way, but it does not promote them automatically.
 
 `final_smoke.sh` now also seeds sample team ratings so the feature store can include ranking and rating-point inputs when they are available before the batch cutoff.
+
+`data/raw/sample/worldcup2026_fixtures_minimal_sample.csv` is a real-like demo input for World Cup 2026 fixtures. It is intentionally not an official fixtures source.
 
 ## Codex guides
 

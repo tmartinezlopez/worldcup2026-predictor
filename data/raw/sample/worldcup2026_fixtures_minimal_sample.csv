@@ -1,0 +1,5 @@
+match_date,stage,group,team_a,team_b,venue,city,country,competition,source
+2026-06-11,group,A,Mexico,South Africa,Estadio Azteca,Mexico City,Mexico,FIFA World Cup 2026,sample
+2026-06-12,group,B,Argentina,Spain,MetLife Stadium,East Rutherford,USA,FIFA World Cup 2026,sample
+2026-06-13,group,C,France,Brazil,AT&T Stadium,Arlington,USA,FIFA World Cup 2026,sample
+2026-06-14,group,D,England,Germany,BMO Field,Toronto,Canada,FIFA World Cup 2026,sample

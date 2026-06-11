@@ -22,6 +22,7 @@
 - Phase 20: submission polish / delivery pack
 - Phase 21: Monte Carlo simulation MVP
 - Phase 22: rankings / ratings minimal input
+- Phase 23: real fixtures minimal
 
 ## Next
 
