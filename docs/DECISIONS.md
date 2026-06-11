@@ -89,6 +89,9 @@
 - Real historical data promotion remains manual and explicit.
 - Rebuild scripts may consume whatever trusted data exists in PostgreSQL.
 - Real data reports disclose readiness and limitations.
+- Real historical data may contain incomplete matches or non-numeric score placeholders.
+- Importers must normalize common missing-value markers without crashing.
+- Invalid/incomplete real rows must be reported, not silently hidden.
 - World Cup fixture samples are real-like demo inputs and not official fixtures.
 - Real official fixtures must be audited and versioned before production use.
 - Batch assignment from World Cup fixtures is explicit and report-generating.

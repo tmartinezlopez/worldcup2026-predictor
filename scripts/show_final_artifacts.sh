@@ -22,11 +22,15 @@ latest_dir() {
 
 batch_code="${1:-GROUP_STAGE_MD1}"
 report_root="data/processed/final_reports/$batch_code"
+dashboard_root="data/processed/dashboard/$batch_code"
 
 show_file "final_report_html" "$report_root/batch_report.html"
 show_file "final_report_md" "$report_root/batch_report.md"
 show_file "final_report_json" "$report_root/batch_report.json"
 show_file "final_report_csv" "$report_root/predictions.csv"
+if [[ -f "$dashboard_root/index.html" ]]; then
+  echo "dashboard_html: $dashboard_root/index.html"
+fi
 
 if latest=$(latest_dir "data/processed/batch_runs"); then
   echo "latest_batch_run_report: $latest/batch_run_report.json"

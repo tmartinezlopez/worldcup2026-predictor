@@ -52,6 +52,21 @@ This audits real historical results in a controlled way. It does not promote aut
 - `data/processed/evaluation_reports`
 - `data/processed/freeze_reports`
 
+## What Is Real vs Demo
+
+- Real architecture/pipeline:
+  controlled staging, validation, audit, promotion, PostgreSQL-backed features, model training, simulation, and exported artifacts
+- Real audit/promotion mechanisms:
+  historical-results source audit and explicit promotion flows are implemented and dry-run-first
+- Sample/demo fixtures:
+  sample and controlled dev data still drive the most repeatable demo flows
+- Real-like fixtures not official:
+  World Cup fixture inputs are realistic demo assets but not official sources
+- Real historical source activation remains manual:
+  audit and readiness reporting exist, but promotion is still explicit and user-decided
+- Predictions quality depends on promoted data:
+  stronger trusted data in PostgreSQL improves coverage and usefulness, but current models remain baseline
+
 ## Implemented Today
 
 - Relational schema foundation
@@ -68,11 +83,13 @@ This audits real historical results in a controlled way. It does not promote aut
 - Final report export MVP
 - Final smoke flow
 - Minimal real-data audit and controlled latest-run promotion
+- Monte Carlo simulation MVP
+- Static dashboard viewer
+- Real-data activation dry-run/reporting
 
 ## Consciously Out Of Scope
 
-- Heavy dashboard or web app
-- Monte Carlo simulation
+- Heavy server-side dashboard or web app
 - Advanced model stack
 - Large real-data automation beyond controlled audit/promotion
 - Production-grade orchestration platform
@@ -81,8 +98,9 @@ This audits real historical results in a controlled way. It does not promote aut
 
 - Sample datasets are intentionally small
 - Models are baseline-only
-- There is no heavy dashboard
-- There is no Monte Carlo simulation yet
+- The delivered dashboard is static, not interactive/server-backed
+- Real historical activation is still manual and explicit
+- Official fixtures are not activated
 
 ## Why The Design Is Robust
 

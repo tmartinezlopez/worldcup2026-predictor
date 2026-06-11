@@ -1,0 +1,1 @@
+"""Static dashboard generation utilities."""

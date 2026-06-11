@@ -83,6 +83,10 @@ bash scripts/final_demo.sh
 bash scripts/real_data_demo.sh
 ```
 
+```bash
+bash scripts/final_release_check.sh
+```
+
 Expected model artifacts for this phase:
 
 - `data/processed/model_reports/<model_run_id>/model_report.json`
@@ -130,6 +134,14 @@ bash scripts/rebuild_with_current_data.sh GROUP_STAGE_MD1 poisson
 
 ```bash
 bash scripts/real_data_demo.sh
+```
+
+If the real source contains `NA` or incomplete scores, the audit should report them as warnings/rejections instead of crashing.
+
+## Final release validation
+
+```bash
+bash scripts/final_release_check.sh
 ```
 
 ## Identity resolution

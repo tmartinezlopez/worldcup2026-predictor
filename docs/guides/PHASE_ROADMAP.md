@@ -26,10 +26,12 @@
 - Phase 24: stronger baseline features/model rebuild
 - Phase 25: static dashboard / viewer
 - Phase 26: real data activation pack
+- Phase 27: final validation / release hardening
+- Phase 28A: real data audit robustness fix
 
 ## Next
 
-- dashboard
+- Phase 28: real data run / activation
 
 ## Later roadmap
 

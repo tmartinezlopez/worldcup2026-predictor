@@ -142,6 +142,12 @@ python -m src.db.drop_db --yes-i-know
 bash scripts/check.sh
 ```
 
+## Final validation
+
+```bash
+bash scripts/final_release_check.sh
+```
+
 ## Safe staging
 
 External data does not enter PostgreSQL yet. Imports must first go through staging, where the project writes normalized JSONL files plus machine-readable and human-readable validation reports.

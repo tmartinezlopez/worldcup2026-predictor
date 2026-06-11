@@ -2,7 +2,7 @@
 
 ## Phase Status
 
-Completed through Phase 26.
+Completed through Phase 28A.
 
 ## Implemented Components
 
@@ -24,18 +24,17 @@ Completed through Phase 26.
 - Stronger baseline features/model rebuild
 - Static dashboard / viewer
 - Real data activation pack
+- Final release check
+- Real data audit robustness fix
 - Submission and delivery documentation
 
 ## Approximate Progress
 
-- Base technical foundation: 93%
-- End-to-end pipeline: 91%
-- Usable product demo: 94%
+- Base technical foundation: 94%
+- End-to-end pipeline: 92%
+- Usable product demo: 95%
 - Final competitive system: 46%
 
 ## Recommended Next Steps
 
-- Add official audited fixtures and richer rating/ranking inputs
-- Add Monte Carlo tournament simulation
-- Build a lightweight dashboard or delivery UI
-- Add stronger models beyond the current baselines
+- Phase 28 real data run/activation

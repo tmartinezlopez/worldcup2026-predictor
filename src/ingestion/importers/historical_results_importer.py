@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 from src.ingestion.importers.base import (
     load_records,
     normalize_bool,
@@ -16,23 +18,45 @@ from src.ingestion.importers.validators import (
 
 
 def _to_int_or_none(value):
-    if value in (None, ""):
+    if value is None:
         return None
-    return int(value)
+    if isinstance(value, float) and math.isnan(value):
+        return None
+    if isinstance(value, str):
+        normalized = value.strip()
+        if normalized.casefold() in {
+            "",
+            "na",
+            "n/a",
+            "none",
+            "null",
+            "nan",
+        }:
+            return None
+        try:
+            return int(normalized)
+        except ValueError:
+            return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def normalize_historical_result_record(record: dict) -> dict:
+    team_a_goals = _to_int_or_none(
+        record.get("team_a_goals") or record.get("home_score")
+    )
+    team_b_goals = _to_int_or_none(
+        record.get("team_b_goals") or record.get("away_score")
+    )
     return {
         "entity_type": "historical_result",
         "date": (record.get("date") or "").strip(),
         "team_a": (record.get("team_a") or record.get("home_team") or "").strip(),
         "team_b": (record.get("team_b") or record.get("away_team") or "").strip(),
-        "team_a_goals": _to_int_or_none(
-            record.get("team_a_goals") or record.get("home_score")
-        ),
-        "team_b_goals": _to_int_or_none(
-            record.get("team_b_goals") or record.get("away_score")
-        ),
+        "team_a_goals": team_a_goals,
+        "team_b_goals": team_b_goals,
         "competition": (
             record.get("competition") or record.get("tournament") or ""
         ).strip(),
@@ -42,7 +66,11 @@ def normalize_historical_result_record(record: dict) -> dict:
         "neutral_site": normalize_bool(
             record.get("neutral") or record.get("neutral_site")
         ),
-        "status": "finished",
+        "status": (
+            "finished"
+            if team_a_goals is not None and team_b_goals is not None
+            else "pending"
+        ),
     }
 
 
