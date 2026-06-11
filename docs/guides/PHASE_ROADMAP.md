@@ -24,6 +24,8 @@
 - Phase 22: rankings / ratings minimal input
 - Phase 23: real fixtures minimal
 - Phase 24: stronger baseline features/model rebuild
+- Phase 25: static dashboard / viewer
+- Phase 26: real data activation pack
 
 ## Next
 

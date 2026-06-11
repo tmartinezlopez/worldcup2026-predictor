@@ -75,6 +75,14 @@ bash scripts/seed_sample_team_ratings.sh
 bash scripts/worldcup2026_minimal_smoke.sh
 ```
 
+```bash
+bash scripts/final_demo.sh
+```
+
+```bash
+bash scripts/real_data_demo.sh
+```
+
 Expected model artifacts for this phase:
 
 - `data/processed/model_reports/<model_run_id>/model_report.json`
@@ -89,6 +97,40 @@ Expected model artifacts for this phase:
 - `data/processed/final_reports/<batch_code>/batch_report.md`
 - `data/processed/final_reports/<batch_code>/batch_report.html`
 - `data/processed/final_reports/<batch_code>/predictions.csv`
+- `data/processed/dashboard/<batch_code>/index.html`
+- `data/processed/dashboard/<batch_code>/dashboard_data.json`
+
+## Static dashboard
+
+```bash
+bash scripts/build_static_dashboard.sh GROUP_STAGE_MD1 --include-simulation
+```
+
+```bash
+bash scripts/final_demo.sh
+```
+
+## Real data activation
+
+```bash
+bash scripts/activate_real_historical_data.sh
+```
+
+```bash
+bash scripts/real_data_activation_report.sh
+```
+
+```bash
+bash scripts/promote_latest_historical_results.sh --promote
+```
+
+```bash
+bash scripts/rebuild_with_current_data.sh GROUP_STAGE_MD1 poisson
+```
+
+```bash
+bash scripts/real_data_demo.sh
+```
 
 ## Identity resolution
 

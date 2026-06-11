@@ -82,6 +82,13 @@
 - Historical form features must be cutoff-aware.
 - Baseline models may use ratings and form features but must fallback safely.
 - Model reports must disclose features used and fallback reasons.
+- Static dashboard is generated from artifacts and is not source of truth.
+- Dashboard has no server/runtime dependency.
+- PostgreSQL remains source of truth.
+- Real data activation is dry-run first.
+- Real historical data promotion remains manual and explicit.
+- Rebuild scripts may consume whatever trusted data exists in PostgreSQL.
+- Real data reports disclose readiness and limitations.
 - World Cup fixture samples are real-like demo inputs and not official fixtures.
 - Real official fixtures must be audited and versioned before production use.
 - Batch assignment from World Cup fixtures is explicit and report-generating.

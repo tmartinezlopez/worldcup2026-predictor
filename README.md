@@ -2,7 +2,7 @@
 
 `worldcup2026-predictor` is the foundation for a dynamic prediction system for the FIFA World Cup 2026. The platform is designed to evaluate predictions in tournament batches, each one closing 10 minutes before the first match in that batch.
 
-This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, a minimal real-data audit/promotion upgrade, a Ratings / Rankings Minimal Input upgrade, a Real Fixtures Minimal upgrade, and a Monte Carlo Simulation MVP, but it still does not implement a dashboard.
+This initial phase focuses on a clean, reproducible, DB-first repository setup. It now includes a relational PostgreSQL schema foundation, Feature Store v1, baseline model MVP support, Evaluation MVP, Official Freeze MVP, an end-to-end batch orchestrator MVP, a final report export MVP, a final end-to-end smoke flow, a minimal real-data audit/promotion upgrade, a Ratings / Rankings Minimal Input upgrade, a Real Fixtures Minimal upgrade, a Monte Carlo Simulation MVP, and a static dashboard viewer.
 
 ## Quick start
 
@@ -26,6 +26,22 @@ Optional simulation demo:
 ```bash
 bash scripts/final_smoke_with_simulation.sh
 ```
+
+Optional static dashboard demo:
+
+```bash
+bash scripts/final_demo.sh
+```
+
+Open the static dashboard at `data/processed/dashboard/GROUP_STAGE_MD1/index.html`.
+
+Optional real-data activation dry-run:
+
+```bash
+bash scripts/real_data_demo.sh
+```
+
+`real_data_demo.sh` audits and runs dry-run reporting only. It does not promote automatically.
 
 Optional World Cup 2026 minimal fixtures demo:
 
@@ -70,6 +86,8 @@ This phase includes:
 - Ratings / Rankings Minimal Input
 - Real Fixtures Minimal
 - Stronger Baseline Features
+- Static Dashboard / Viewer
+- Real Data Activation Pack
 - Baseline operational scripts
 - Initial documentation
 - Minimal tests
@@ -80,7 +98,7 @@ This phase does not yet include:
 - Official World Cup 2026 fixtures ingestion
 - Advanced model evaluation
 - Tournament orchestration logic
-- Dashboard or reporting UI
+- Server-side dashboard or framework-based UI
 
 ## Setup
 
